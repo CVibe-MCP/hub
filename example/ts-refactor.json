@@ -1,0 +1,22 @@
+{
+    "name": "@org/ts-refactor-pro",
+    "version": "1.2.0",
+    "description": "Refactor JS → TS with types + JSDoc; preserves runtime; ships with tests.",
+    "license": "MIT",
+    "author": "harelush",
+    "files": ["prompt.json"],
+    "vibe": {
+      "kind": "prompt",
+      "models": {
+        "recommended": ["claude-sonnet-4"],
+        "compatible": ["claude-opus-4", "gemini-2.5-pro"]
+      },
+      "inputs": [{ "name": "source_files", "type": "file[]" }],
+      "quality": {
+        "tests_pass_rate": 0.92,
+        "build_success_rate": 1.0,
+        "last_verified": "2025-08-15"
+      }
+    }
+  }
+  

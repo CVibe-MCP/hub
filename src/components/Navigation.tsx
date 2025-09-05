@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, Package, Plus, Menu, X, MessageCircle } from 'lucide-react';
+import { Search, Package, Plus, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navigation() {
@@ -13,7 +13,7 @@ export default function Navigation() {
     { href: '/browse', label: 'Browse packages' },
     { href: '/publish', label: 'Publish' },
     { href: '/docs', label: 'Docs' },
-    { href: 'https://discord.gg/xtzRyfky', label: 'Community', external: true, icon: MessageCircle },
+    { href: 'https://discord.gg/xtzRyfky', label: 'Community', external: true },
   ];
 
   return (

@@ -11,7 +11,6 @@ export default function Navigation() {
 
   const navItems = [
     { href: '/browse', label: 'Browse packages' },
-    { href: '/publish', label: 'Publish' },
     { href: '/docs', label: 'Docs' },
     { href: 'https://discord.gg/xtzRyfky', label: 'Community', external: true },
   ];

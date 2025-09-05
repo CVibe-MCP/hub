@@ -109,13 +109,6 @@ export default function Home() {
               <Package size={16} />
               <span>Browse packages</span>
             </Link>
-            <Link
-              href="/publish"
-              className="inline-flex items-center space-x-2 bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:border-gray-400 transition-colors"
-            >
-              <Code size={16} />
-              <span>Publish a package</span>
-            </Link>
           </div>
         </div>
       </section>
@@ -134,7 +127,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Reusable packages</h3>
               <p className="text-gray-600">
-                No more copy-pasting prompts. Install and reuse with <code className="bg-gray-100 px-2 py-1 rounded text-sm">@username/package-name</code>
+                No more copy-pasting prompts. Install and reuse.
               </p>
             </div>
             
@@ -146,12 +139,7 @@ export default function Home() {
               <p className="text-gray-600">
                 Built for Claude Code, Cursor, and other MCP-compatible tools. Drop into your workflow instantly.
               </p>
-              {/* Tool compatibility badges */}
-              <div className="flex justify-center items-center space-x-4 mt-3">
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded font-medium">Claude Code</span>
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded font-medium">Cursor</span>
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded font-medium">Continue</span>
-              </div>
+
             </div>
             
             <div className="text-center">
@@ -346,13 +334,6 @@ export default function Home() {
             >
               <Package size={18} />
               <span>Browse prompts</span>
-            </Link>
-            <Link
-              href="/publish"
-              className="inline-flex items-center justify-center space-x-2 border border-[#007BFF] text-[#007BFF] px-8 py-3 rounded-lg font-medium hover:bg-blue-50 transition-colors"
-            >
-              <Code size={18} />
-              <span>Contribute a prompt</span>
             </Link>
           </div>
         </div>

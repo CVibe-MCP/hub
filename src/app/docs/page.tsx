@@ -253,56 +253,43 @@ export default function DocsPage() {
             </div>
           </div>
           
-          <p className="text-lg text-gray-600 mb-8">Publish your package to the CVibe registry</p>
-          
-          <div className="bg-gray-900 text-gray-100 p-6 rounded-lg font-mono mb-8">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-gray-400"># Publish to CVibe registry</div>
-              <button className="text-gray-400 hover:text-white transition-colors" title="Copy to clipboard">
-                <Copy size={16} />
-              </button>
+          <p className="text-lg text-gray-600 mb-4">Publish your package to the CVibe registry</p>
+
+          <div className="bg-gray-50 p-6 rounded-lg mb-6">
+            <div className="text-center mb-4">
+              <div className="text-sm text-gray-500 mb-2">Chat with your AI:</div>
+              <div className="text-xl text-gray-900 font-medium">
+                "publish to cvibe @cvibe-package.json"
+              </div>
             </div>
-            <div className="text-green-400 text-lg">cvibe publish</div>
-            <div className="text-gray-400 mt-3">
-              <div>📦 Publishing @username/my-prompt@1.0.0...</div>
-              <div>✓ Package uploaded successfully</div>
-              <div>✓ Available at: cvibe.dev/package/@username/my-prompt</div>
+            <div className="text-center text-sm text-gray-600">
+              → AI publishes your package to the registry
             </div>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
-            <div className="flex items-start space-x-3">
-              <div className="w-6 h-6 bg-green-500 rounded-full flex-shrink-0 mt-0.5 flex items-center justify-center">
-                <div className="w-3 h-3 bg-white rounded-full"></div>
+          <div className="grid md:grid-cols-3 gap-4 text-center">
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Package className="w-5 h-5 text-gray-600" />
               </div>
-              <div>
-                <p className="font-semibold text-green-800 text-lg">Package published! 🎉</p>
-                <p className="text-green-700 mt-1">Your prompt is now available to developers worldwide. Anyone can install it with:</p>
-                <div className="bg-white border border-green-300 rounded p-3 font-mono text-sm mt-3">
-                  <span className="text-green-600">cvibe install @username/my-prompt</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="font-semibold text-gray-900 mb-3">What happens next?</h3>
-              <div className="space-y-2 text-sm text-gray-700">
-                <div>✓ Package appears in search results</div>
-                <div>✓ Available on cvibe.dev/browse</div>
-                <div>✓ Auto-indexed by AI tools</div>
-                <div>✓ Community can discover & use it</div>
-              </div>
+              <h4 className="font-medium text-gray-900 mb-2">Auto Detection</h4>
+              <p className="text-sm text-gray-600">Finds your cvibe-package.json and validates it.</p>
             </div>
             
-            <div className="border border-gray-200 rounded-lg p-6">
-              <h3 className="font-semibold text-gray-900 mb-3">Update your package</h3>
-              <div className="space-y-2 text-sm text-gray-700">
-                <div>1. Edit your prompt files</div>
-                <div>2. Bump version in package.json</div>
-                <div>3. Run <code className="bg-gray-100 px-2 py-1 rounded">cvibe publish</code> again</div>
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Upload className="w-5 h-5 text-gray-600" />
               </div>
+              <h4 className="font-medium text-gray-900 mb-2">Registry Upload</h4>
+              <p className="text-sm text-gray-600">Publishes to CVibe registry with unique ID.</p>
+            </div>
+            
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Terminal className="w-5 h-5 text-gray-600" />
+              </div>
+              <h4 className="font-medium text-gray-900 mb-2">Instant Access</h4>
+              <p className="text-sm text-gray-600">Available immediately for search and use.</p>
             </div>
           </div>
         </section>
@@ -351,19 +338,6 @@ export default function DocsPage() {
               <ChevronRight size={16} className="text-gray-400 group-hover:translate-x-1 transition-transform" />
             </Link>
 
-            <Link
-              href="/publish"
-              className="flex items-center space-x-3 p-6 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow group"
-            >
-              <div className="w-12 h-12 bg-[#007BFF] text-white rounded-lg flex items-center justify-center">
-                <Upload size={24} />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 group-hover:text-[#007BFF]">Publish Package</h3>
-                <p className="text-sm text-gray-600">Share your prompts with the world</p>
-              </div>
-              <ChevronRight size={16} className="text-gray-400 group-hover:translate-x-1 transition-transform" />
-            </Link>
           </div>
         </div>
       </div>

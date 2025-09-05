@@ -1,0 +1,371 @@
+'use client';
+
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { Package, Calendar, User, Code2, Copy, Loader2, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api';
+import { ApiPromptResponse } from '@/lib/types';
+
+interface PageProps {
+  params: Promise<{
+    name: string;
+  }>;
+}
+
+export default function PackagePage({ params }: PageProps) {
+  const [name, setName] = useState<string>('');
+  const [decodedName, setDecodedName] = useState<string>('');
+  
+  const [packageData, setPackageData] = useState<ApiPromptResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Handle async params
+  useEffect(() => {
+    const resolveParams = async () => {
+      const resolvedParams = await params;
+      const paramName = resolvedParams.name;
+      setName(paramName);
+      setDecodedName(decodeURIComponent(paramName));
+    };
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!decodedName) return;
+    const fetchPackage = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // First try to get by ID (if the name looks like an ID)
+        if (decodedName.match(/^[a-zA-Z0-9_-]+$/)) {
+          try {
+            const response = await apiClient.getPrompt(decodedName);
+            setPackageData(response);
+            return;
+          } catch (idError) {
+            // If ID lookup fails, continue to search by name
+          }
+        }
+        
+        // Search by name
+        const searchResponse = await apiClient.searchPrompts({ 
+          query: decodedName,
+          limit: 50 
+        });
+        
+        // Find exact match by name
+        const exactMatch = searchResponse.prompts.find(
+          p => p.name.toLowerCase() === decodedName.toLowerCase()
+        );
+        
+        if (exactMatch) {
+          setPackageData(exactMatch);
+        } else {
+          // If no exact match, try partial match
+          const partialMatch = searchResponse.prompts.find(
+            p => p.name.toLowerCase().includes(decodedName.toLowerCase())
+          );
+          
+          if (partialMatch) {
+            setPackageData(partialMatch);
+          } else {
+            setError('Package not found');
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching package:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load package');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPackage();
+  }, [decodedName]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="animate-spin h-8 w-8 text-[#007BFF]" />
+            <span className="ml-2 text-gray-600">Loading package...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !packageData) {
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Package not found</h3>
+              <p className="text-gray-600 mb-4">
+                {error || `Could not find package "${decodedName}"`}
+              </p>
+              <Link
+                href="/browse"
+                className="bg-[#007BFF] text-white px-4 py-2 rounded-lg hover:bg-[#0056b3] transition-colors"
+              >
+                Browse packages
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const { content } = packageData;
+  const cvibe = content.cvibe;
+
+  // Calculate relative time
+  const updatedDate = new Date(packageData.updatedAt);
+  const now = new Date();
+  const diffInDays = Math.floor((now.getTime() - updatedDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+  let timeAgo: string;
+  if (diffInDays === 0) {
+    timeAgo = 'today';
+  } else if (diffInDays === 1) {
+    timeAgo = '1 day ago';
+  } else if (diffInDays < 7) {
+    timeAgo = `${diffInDays} days ago`;
+  } else if (diffInDays < 30) {
+    const weeks = Math.floor(diffInDays / 7);
+    timeAgo = weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+  } else if (diffInDays < 365) {
+    const months = Math.floor(diffInDays / 30);
+    timeAgo = months === 1 ? '1 month ago' : `${months} months ago`;
+  } else {
+    const years = Math.floor(diffInDays / 365);
+    timeAgo = years === 1 ? '1 year ago' : `${years} years ago`;
+  }
+
+  const handleCopyInstall = () => {
+    navigator.clipboard.writeText(`cvibe get ${packageData.id}`);
+  };
+
+  const handleCopyId = () => {
+    navigator.clipboard.writeText(packageData.id);
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center space-x-2 text-sm text-gray-600 mb-2">
+            <Link href="/" className="hover:text-[#007BFF]">cvibe</Link>
+            <span>/</span>
+            <span className="font-medium">{packageData.name}</span>
+          </div>
+          
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                {packageData.name}
+              </h1>
+              <p className="text-gray-600 text-lg mb-4">{content.description}</p>
+              
+              <div className="flex items-center space-x-6 text-sm text-gray-600">
+                <div className="flex items-center space-x-1">
+                  <Calendar size={16} />
+                  <span>Updated {timeAgo}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <User size={16} />
+                  <span>{content.author}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Package size={16} />
+                  <span>{cvibe.category}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-right">
+              <div className="text-lg font-semibold text-gray-900 mb-2">
+                {cvibe.difficulty}
+              </div>
+              <div className="space-y-2">
+                <button 
+                  onClick={handleCopyInstall}
+                  className="w-full bg-[#007BFF] text-white px-4 py-2 rounded-lg hover:bg-[#0056CC] transition-colors flex items-center justify-center space-x-2"
+                >
+                  <Copy size={16} />
+                  <span>Copy Install</span>
+                </button>
+                <button 
+                  onClick={handleCopyId}
+                  className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
+                >
+                  <Code2 size={16} />
+                  <span>Copy ID</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            {/* Usage */}
+            <div className="mb-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Usage</h2>
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 font-mono">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-gray-500 text-sm">Ask your AI:</span>
+                    <code className="text-gray-900 font-medium">cvibe get {packageData.id}</code>
+                  </div>
+                  <button 
+                    onClick={handleCopyInstall}
+                    className="text-gray-500 hover:text-gray-700 transition-colors"
+                    title="Copy to clipboard"
+                  >
+                    <Copy size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* README */}
+            <div className="mb-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-4">README</h2>
+              <div className="prose max-w-none">
+                <div className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  {packageData.readme}
+                </div>
+              </div>
+            </div>
+
+            {/* Prompt Content */}
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Prompt Content</h2>
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <pre className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed">
+                  {content.prompt}
+                </pre>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="space-y-6">
+              {/* Package Info */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Package Info</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">ID</span>
+                    <code className="text-xs bg-gray-100 px-1 rounded">{packageData.id}</code>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">License</span>
+                    <span className="font-medium">{content.license || 'MIT'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Difficulty</span>
+                    <span className="font-medium">{cvibe.difficulty}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Category</span>
+                    <span className="font-medium">{cvibe.category}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Model Compatibility */}
+              {(cvibe.models.recommended.length > 0 || cvibe.models.compatible.length > 0) && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Model Compatibility</h3>
+                  <div className="space-y-3 text-sm">
+                    {cvibe.models.recommended.length > 0 && (
+                      <div>
+                        <span className="text-gray-600 block mb-1">Recommended:</span>
+                        <div className="flex flex-wrap gap-1">
+                          {cvibe.models.recommended.map((model) => (
+                            <span
+                              key={model}
+                              className="bg-green-50 text-green-700 px-2 py-1 rounded text-xs"
+                            >
+                              {model}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {cvibe.models.compatible.length > 0 && (
+                      <div>
+                        <span className="text-gray-600 block mb-1">Compatible:</span>
+                        <div className="flex flex-wrap gap-1">
+                          {cvibe.models.compatible.map((model) => (
+                            <span
+                              key={model}
+                              className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs"
+                            >
+                              {model}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Required Inputs */}
+              {cvibe.inputs.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Required Inputs</h3>
+                  <div className="space-y-2">
+                    {cvibe.inputs.map((input) => (
+                      <div key={input.name} className="border border-gray-200 rounded-lg p-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <code className="text-sm font-medium text-blue-600">
+                            {`{${input.name}}`}
+                          </code>
+                          <span className="text-xs text-gray-500">{input.type}</span>
+                        </div>
+                        <p className="text-xs text-gray-600">{input.description}</p>
+                        {input.required && (
+                          <span className="text-xs text-red-600">Required</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Keywords/Tags */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {cvibe.tags.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`/browse?q=${tag}`}
+                      className="bg-blue-50 text-[#007BFF] px-2 py-1 rounded text-xs hover:bg-blue-100 transition-colors"
+                    >
+                      {tag}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

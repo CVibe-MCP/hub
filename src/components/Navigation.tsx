@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Search, Package, Plus, Menu, X } from 'lucide-react';
+import { Search, Package, Plus, Menu, X, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navigation() {
@@ -13,6 +13,7 @@ export default function Navigation() {
     { href: '/browse', label: 'Browse packages' },
     { href: '/publish', label: 'Publish' },
     { href: '/docs', label: 'Docs' },
+    { href: 'https://discord.gg/xtzRyfky', label: 'Community', external: true, icon: MessageCircle },
   ];
 
   return (
@@ -38,13 +39,15 @@ export default function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium transition-colors ${
+                {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
+                className={`inline-flex items-center space-x-1 text-sm font-medium transition-colors ${
                   pathname === item.href
                     ? 'text-[#007BFF]'
                     : 'text-gray-700 hover:text-[#007BFF]'
-                }`}
+                } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
               >
-                {item.label}
+                {item.icon && <item.icon size={16} />}
+                <span>{item.label}</span>
               </Link>
             ))}
           </div>
@@ -78,14 +81,16 @@ export default function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block px-3 py-2 text-sm font-medium transition-colors ${
+                  {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
+                  className={`inline-flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors ${
                     pathname === item.href
                       ? 'text-[#007BFF]'
                       : 'text-gray-700 hover:text-[#007BFF]'
-                  }`}
+                  } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {item.label}
+                  {item.icon && <item.icon size={16} />}
+                  <span>{item.label}</span>
                 </Link>
               ))}
               

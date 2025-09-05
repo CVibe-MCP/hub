@@ -47,13 +47,11 @@ export interface ApiPromptsListResponse {
   offset: number;
 }
 
-// Transformed types for the UI (matching the old mock structure)
+// Transformed types for the UI (simplified for MVP)
 export interface BrowsePackage {
   id: string;
   name: string;
-  version: string;
   description: string;
-  downloads: string;
   updated: string;
   keywords: string[];
   author: string;

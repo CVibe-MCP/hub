@@ -3,12 +3,34 @@
 import Link from 'next/link';
 import { Search, Package, Users, Code, ArrowRight, Mail } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { fetchBrowsePackages } from '@/lib/api';
+import { BrowsePackage } from '@/lib/types';
 
 export default function Home() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
+  const [featuredPackages, setFeaturedPackages] = useState<BrowsePackage[]>([]);
+  const [packagesLoading, setPackagesLoading] = useState(true);
+
+  // Load featured packages
+  useEffect(() => {
+    const loadFeaturedPackages = async () => {
+      try {
+        setPackagesLoading(true);
+        const result = await fetchBrowsePackages({ limit: 3 });
+        setFeaturedPackages(result.packages);
+      } catch (error) {
+        console.error('Failed to load featured packages:', error);
+        setFeaturedPackages([]);
+      } finally {
+        setPackagesLoading(false);
+      }
+    };
+
+    loadFeaturedPackages();
+  }, []);
 
   // Auto-clear success messages after 5 seconds
   useEffect(() => {
@@ -192,40 +214,45 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Package cards - real data without fake stats */}
+          {/* Package cards - real data from server */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-semibold text-gray-900">React Component Generator Pro</h3>
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">v2.1.0</span>
+            {packagesLoading ? (
+              // Loading skeleton
+              Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="bg-white border border-gray-200 rounded-lg p-4 animate-pulse">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  </div>
+                  <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
+                </div>
+              ))
+            ) : featuredPackages.length > 0 ? (
+              featuredPackages.map((pkg) => (
+                <div key={pkg.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-semibold text-gray-900">{pkg.name}</h3>
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                      {pkg.difficulty}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-4">{pkg.description}</p>
+                  <div className="flex items-center justify-between">
+                    <Link href="/browse" className="text-sm text-[#007BFF] hover:text-[#0056CC] font-medium">
+                      View details →
+                    </Link>
+                    <span className="text-xs text-gray-500">by {pkg.author}</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              // Fallback when no packages available
+              <div className="col-span-full text-center py-8">
+                <p className="text-gray-500">No packages available yet. Check back soon!</p>
               </div>
-              <p className="text-sm text-gray-600 mb-4">Generate production-ready React components with TypeScript, tests, and documentation</p>
-              <Link href="/browse" className="text-sm text-[#007BFF] hover:text-[#0056CC] font-medium">
-                View details →
-              </Link>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-semibold text-gray-900">API Debug Detective</h3>
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">v1.5.2</span>
-              </div>
-              <p className="text-sm text-gray-600 mb-4">Systematically debug API issues with comprehensive analysis and solutions</p>
-              <Link href="/browse" className="text-sm text-[#007BFF] hover:text-[#0056CC] font-medium">
-                View details →
-              </Link>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-semibold text-gray-900">SQL Query Optimizer Pro</h3>
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">v3.0.1</span>
-              </div>
-              <p className="text-sm text-gray-600 mb-4">Analyze and optimize SQL queries for maximum performance</p>
-              <Link href="/browse" className="text-sm text-[#007BFF] hover:text-[#0056CC] font-medium">
-                View details →
-              </Link>
-            </div>
+            )}
           </div>
         </div>
       </section>

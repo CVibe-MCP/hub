@@ -57,17 +57,23 @@ export default function BrowsePage() {
   };
 
   // Load more packages
-  const loadMore = () => {
+  const loadMore = async () => {
     if (!hasMore || loading) return;
     
-    loadPackages({ 
-      query: searchQuery.trim() || undefined,
-      limit: 20,
-      offset: packages.length 
-    }).then((result) => {
+    try {
+      setLoading(true);
+      const result = await fetchBrowsePackages({ 
+        query: searchQuery.trim() || undefined,
+        limit: 20,
+        offset: packages.length 
+      });
       setPackages(prev => [...prev, ...result.packages]);
       setHasMore(result.hasMore);
-    });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load more packages');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -111,8 +117,8 @@ export default function BrowsePage() {
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
               >
                 <option value="relevance">Sort by relevance</option>
-                <option value="downloads">Sort by downloads</option>
                 <option value="updated">Sort by updated</option>
+                <option value="name">Sort by name</option>
               </select>
             </div>
             
@@ -175,7 +181,6 @@ export default function BrowsePage() {
                       <h3 className="text-lg font-semibold text-gray-900 hover:text-[#007BFF]">
                         {pkg.name}
                       </h3>
-                      <span className="text-sm text-gray-500">v{pkg.version}</span>
                       <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                         {pkg.difficulty}
                       </span>

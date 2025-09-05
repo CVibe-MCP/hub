@@ -100,9 +100,7 @@ export function transformApiPromptToBrowsePackage(apiPrompt: ApiPromptResponse):
   return {
     id: apiPrompt.id,
     name: apiPrompt.name,
-    version: '1.0.0', // API doesn't have version field, using default
     description: content.description,
-    downloads: 'N/A', // API doesn't track downloads yet
     updated,
     keywords: content.cvibe.tags,
     author: content.author,

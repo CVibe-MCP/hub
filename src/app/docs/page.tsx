@@ -33,9 +33,9 @@ export default function DocsPage() {
               <Code size={16} />
               <span>3. Create</span>
             </a>
-            <a href="#deploy" className="inline-flex items-center space-x-2 border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <a href="#publish" className="inline-flex items-center space-x-2 border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors">
               <Upload size={16} />
-              <span>4. Deploy</span>
+              <span>4. Publish</span>
             </a>
           </div>
         </div>
@@ -197,73 +197,56 @@ export default function DocsPage() {
             <h2 className="text-3xl font-bold text-gray-900">Create Packages</h2>
             <div className="flex items-center space-x-2 text-gray-500">
               <Clock size={16} />
-              <span className="text-sm">5 minutes</span>
+              <span className="text-sm">2 minutes</span>
             </div>
           </div>
           
-          <p className="text-lg text-gray-600 mb-8">Build your own prompt package from scratch</p>
-          
-          <div className="bg-gray-900 text-gray-100 p-6 rounded-lg font-mono mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-gray-400"># Create new package</div>
-              <button className="text-gray-400 hover:text-white transition-colors" title="Copy to clipboard">
-                <Copy size={16} />
-              </button>
-            </div>
-            <div className="text-green-400 text-lg">mkdir my-prompt && cd my-prompt</div>
-            <div className="text-green-400 text-lg mt-2">cvibe init</div>
-          </div>
+          <p className="text-lg text-gray-600 mb-4">Start a new CVibe prompt package</p>
 
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Package structure created:</h3>
-            <div className="font-mono text-sm text-gray-700">
-              <div>my-prompt/</div>
-              <div className="ml-4">├── cvibe-package.json</div>
-              <div className="ml-4">├── prompt.json</div>
-              <div className="ml-4">└── README.md</div>
-            </div>
-          </div>
-
-          <div className="bg-gray-900 text-gray-100 p-6 rounded-lg font-mono text-sm mb-6">
-            <div className="text-gray-400 mb-3"># Edit your prompt.json</div>
-            <div className="text-white">
-{`{
-  "system": "You are an expert code reviewer.",
-  "user": "Review this code: {{code}}",
-  "variables": ["code"]
-}`}
-            </div>
-          </div>
-
-          <div className="bg-gray-900 text-gray-100 p-6 rounded-lg font-mono mb-8">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-gray-400"># Test your prompt locally</div>
-              <button className="text-gray-400 hover:text-white transition-colors" title="Copy to clipboard">
-                <Copy size={16} />
-              </button>
-            </div>
-            <div className="text-green-400 text-lg">cvibe test</div>
-            <div className="text-gray-400 mt-2">✓ Prompt structure is valid</div>
-          </div>
-
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-start space-x-3">
-              <div className="w-5 h-5 bg-blue-500 rounded-full flex-shrink-0 mt-0.5 flex items-center justify-center">
-                <div className="w-2 h-2 bg-white rounded-full"></div>
+          <div className="bg-gray-50 p-6 rounded-lg mb-6">
+            <div className="text-center mb-4">
+              <div className="text-sm text-gray-500 mb-2">Chat with your AI:</div>
+              <div className="text-xl text-gray-900 font-medium">
+                "init a cvibe prompt package"
               </div>
-              <div>
-                <p className="font-medium text-blue-800">Package ready!</p>
-                <p className="text-blue-700 text-sm">Your prompt package is created and tested. Time to share it with the world.</p>
+            </div>
+            <div className="text-center text-sm text-gray-600">
+              → AI creates cvibe-package.json + files
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4 text-center">
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Package className="w-5 h-5 text-gray-600" />
               </div>
+              <h4 className="font-medium text-gray-900 mb-2">Auto Structure</h4>
+              <p className="text-sm text-gray-600">Creates package.json, README, and prompt files.</p>
+            </div>
+            
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Code className="w-5 h-5 text-gray-600" />
+              </div>
+              <h4 className="font-medium text-gray-900 mb-2">Smart Defaults</h4>
+              <p className="text-sm text-gray-600">Fills in metadata, tags, and configuration.</p>
+            </div>
+            
+            <div className="border border-gray-200 rounded-lg p-4">
+              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Terminal className="w-5 h-5 text-gray-600" />
+              </div>
+              <h4 className="font-medium text-gray-900 mb-2">Ready to Edit</h4>
+              <p className="text-sm text-gray-600">Just customize your prompt and publish.</p>
             </div>
           </div>
         </section>
 
-        {/* Step 4: Deploy Packages */}
-        <section id="deploy" className="mb-20">
+        {/* Step 4: Publish Packages */}
+        <section id="publish" className="mb-20">
           <div className="flex items-center space-x-3 mb-6">
             <div className="w-10 h-10 bg-[#007BFF] text-white rounded-full flex items-center justify-center font-bold">4</div>
-            <h2 className="text-3xl font-bold text-gray-900">Deploy Packages</h2>
+            <h2 className="text-3xl font-bold text-gray-900">Publish Packages</h2>
             <div className="flex items-center space-x-2 text-gray-500">
               <Clock size={16} />
               <span className="text-sm">1 minute</span>

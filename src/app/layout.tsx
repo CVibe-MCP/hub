@@ -6,21 +6,39 @@ import Navigation from "@/components/Navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Cvibe - The npm for Prompts",
-  description: "Discover, share, and access field-tested AI prompts. The lightweight, open hub where developers publish, discover, and reuse AI prompts without reinventing the wheel.",
-  keywords: ["AI prompts", "prompt engineering", "developer tools", "AI", "prompts", "MCP", "Claude"],
-  authors: [{ name: "Cvibe Community" }],
+  title: "Cvibe - Like npm, but for prompts",
+  description: "Reusable, standardized, MCP-native prompts. Build better AI workflows with the community. Like npm, but for prompts - discover, publish, and install prompt packages.",
+  keywords: [
+    "npm for prompts", 
+    "prompt management", 
+    "prompt cli", 
+    "prompt mcp", 
+    "prompt hub", 
+    "ai prompts", 
+    "mcp native", 
+    "prompt packages", 
+    "claude code", 
+    "cursor prompts",
+    "prompt engineering",
+    "ai workflow",
+    "developer tools"
+  ],
+  authors: [{ name: "Cvibe" }],
   openGraph: {
-    title: "Cvibe - The npm for Prompts",
-    description: "Discover, share, and access field-tested AI prompts",
+    title: "Cvibe - Like npm, but for prompts",
+    description: "Reusable, standardized, MCP-native prompts. Build better AI workflows with the community.",
     url: "https://cvibe.dev",
     siteName: "Cvibe",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cvibe - The npm for Prompts",
-    description: "Discover, share, and access field-tested AI prompts",
+    title: "Cvibe - Like npm, but for prompts",
+    description: "Reusable, standardized, MCP-native prompts. Build better AI workflows with the community.",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -31,9 +49,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased bg-gray-50`}>
+      <body className={`${inter.className} antialiased bg-white`}>
         <Navigation />
-        <main className="min-h-screen">
+        <main>
           {children}
         </main>
       </body>

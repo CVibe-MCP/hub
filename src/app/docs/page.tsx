@@ -16,7 +16,7 @@ export default function DocsPage() {
             Get started in 4 steps
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Install CVibe, use packages, create your own, and share with the community. Zero friction, maximum impact.
+            Install cvibe, use packages, create your own, and share with the community. Zero friction, maximum impact.
           </p>
           
           {/* Quick Navigation */}
@@ -40,18 +40,18 @@ export default function DocsPage() {
           </div>
         </div>
 
-        {/* Step 1: Install CVibe */}
+        {/* Step 1: Install cvibe */}
         <section id="install" className="mb-20">
           <div className="flex items-center space-x-3 mb-6">
             <div className="w-10 h-10 bg-[#007BFF] text-white rounded-full flex items-center justify-center font-bold">1</div>
-            <h2 className="text-3xl font-bold text-gray-900">Install CVibe</h2>
+            <h2 className="text-3xl font-bold text-gray-900">Install cvibe</h2>
             <div className="flex items-center space-x-2 text-gray-500">
               <Clock size={16} />
               <span className="text-sm">30 seconds</span>
             </div>
           </div>
           
-          <p className="text-lg text-gray-600 mb-6">Connect CVibe to your AI development tools via MCP</p>
+          <p className="text-lg text-gray-600 mb-6">Connect cvibe to your AI development tools via MCP</p>
           
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
             {/* Tab Navigation */}
@@ -89,7 +89,7 @@ export default function DocsPage() {
               <div>
                 <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm mb-4">
                   <div className="flex items-center justify-between mb-3">
-                    <div className="text-gray-400"># Add CVibe MCP server</div>
+                    <div className="text-gray-400"># Add cvibe MCP server</div>
                     <button className="text-gray-400 hover:text-white transition-colors" title="Copy to clipboard">
                       <Copy size={14} />
                     </button>
@@ -101,7 +101,7 @@ export default function DocsPage() {
                 <div className="bg-green-50 border border-green-200 rounded p-3 text-sm">
                   <div className="flex items-center space-x-2 text-green-800">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="font-medium">CVibe connected to Claude Code</span>
+                    <span className="font-medium">cvibe connected to Claude Code</span>
                   </div>
                 </div>
               </div>
@@ -130,7 +130,7 @@ export default function DocsPage() {
                 <div className="bg-green-50 border border-green-200 rounded p-3 text-sm">
                   <div className="flex items-center space-x-2 text-green-800">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="font-medium">Restart Cursor to activate CVibe</span>
+                    <span className="font-medium">Restart Cursor to activate cvibe</span>
                   </div>
                 </div>
               </div>
@@ -149,7 +149,7 @@ export default function DocsPage() {
             </div>
           </div>
           
-          <p className="text-lg text-gray-600 mb-4">Ask your AI tool to run any CVibe prompt</p>
+          <p className="text-lg text-gray-600 mb-4">Ask your AI tool to run any cvibe prompt</p>
 
           <div className="bg-gray-50 p-6 rounded-lg mb-6">
             <div className="text-center mb-4">
@@ -201,7 +201,7 @@ export default function DocsPage() {
             </div>
           </div>
           
-          <p className="text-lg text-gray-600 mb-4">Start a new CVibe prompt package</p>
+          <p className="text-lg text-gray-600 mb-4">Start a new cvibe prompt package</p>
 
           <div className="bg-gray-50 p-6 rounded-lg mb-6">
             <div className="text-center mb-4">
@@ -253,7 +253,7 @@ export default function DocsPage() {
             </div>
           </div>
           
-          <p className="text-lg text-gray-600 mb-4">Publish your package to the CVibe registry</p>
+          <p className="text-lg text-gray-600 mb-4">Publish your package to the cvibe registry</p>
 
           <div className="bg-gray-50 p-6 rounded-lg mb-6">
             <div className="text-center mb-4">
@@ -281,7 +281,7 @@ export default function DocsPage() {
                 <Upload className="w-5 h-5 text-gray-600" />
               </div>
               <h4 className="font-medium text-gray-900 mb-2">Registry Upload</h4>
-              <p className="text-sm text-gray-600">Publishes to CVibe registry with unique ID.</p>
+              <p className="text-sm text-gray-600">Publishes to cvibe registry with unique ID.</p>
             </div>
             
             <div className="border border-gray-200 rounded-lg p-4">
@@ -301,7 +301,7 @@ export default function DocsPage() {
               Ready to build something amazing?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Join thousands of developers already using CVibe to streamline their AI workflows
+              Join thousands of developers already using cvibe to streamline their AI workflows
             </p>
           </div>
 

@@ -46,7 +46,6 @@ export default function Navigation() {
                     : 'text-gray-700 hover:text-[#007BFF]'
                 } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
               >
-                {item.icon && <item.icon size={16} />}
                 <span>{item.label}</span>
               </Link>
             ))}
@@ -89,7 +88,6 @@ export default function Navigation() {
                   } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {item.icon && <item.icon size={16} />}
                   <span>{item.label}</span>
                 </Link>
               ))}

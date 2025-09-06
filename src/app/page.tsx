@@ -89,20 +89,16 @@ export default function Home() {
             <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
               Reusable, <strong>standardized</strong>, <strong>MCP-native</strong> prompts. Build better AI workflows with the <strong>community</strong>.
             </p>
-
-            {/* Video Placeholder */}
-            <div className="bg-gray-100 rounded-lg p-12 max-w-3xl mx-auto mb-8 border-2 border-dashed border-gray-300">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">See Cvibe in Action</h3>
-                <p className="text-gray-600">Watch how to install and use prompts in 30 seconds</p>
-                <button className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-                  Play Demo Video
-                </button>
+            <div className="max-w-3xl mx-auto mb-8">
+              <div className="relative w-full" style={{paddingBottom: '56.25%'}}>
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full rounded-lg"
+                  src="https://www.youtube.com/embed/A_AzNWSj6XY"
+                  title="Cvibe Demo Video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
               </div>
             </div>
 

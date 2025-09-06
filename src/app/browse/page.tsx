@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Search, Filter, Download, Calendar, AlertCircle, Loader2, User, Folder, FileText } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchBrowsePackages } from '@/lib/api';
 import { BrowsePackage, SearchFilters } from '@/lib/types';
 
@@ -14,11 +14,20 @@ export default function BrowsePage() {
   const [sortBy, setSortBy] = useState('relevance');
   const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastSearchQueryRef = useRef<string>('');
 
   // Load packages
-  const loadPackages = async (filters: SearchFilters = {}) => {
+  const loadPackages = async (filters: SearchFilters = {}, isSearch = false) => {
     try {
-      setLoading(true);
+      if (isSearch) {
+        setIsSearching(true);
+      } else {
+        setLoading(true);
+      }
       setError(null);
       const result = await fetchBrowsePackages(filters);
       setPackages(result.packages);
@@ -29,39 +38,45 @@ export default function BrowsePage() {
       setPackages([]);
     } finally {
       setLoading(false);
+      setIsSearching(false);
     }
   };
 
-  // Initial load
-  useEffect(() => {
-    loadPackages();
+  // Debounced search function
+  const debouncedSearch = useCallback((query: string) => {
+    // Clear existing timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Don't search if query hasn't changed
+    if (query === lastSearchQueryRef.current) {
+      return;
+    }
+
+    const trimmedQuery = query.trim();
+    
+    // Set new timeout
+    searchTimeoutRef.current = setTimeout(() => {
+      lastSearchQueryRef.current = query;
+      
+      // Only search if query is empty (show all) or has at least 2 characters
+      if (trimmedQuery === '' || trimmedQuery.length >= 2) {
+        loadPackages({ 
+          query: trimmedQuery || undefined,
+          limit: 20 
+        }, true);
+      }
+    }, 500); // 500ms debounce for better UX
   }, []);
 
-  // Handle search
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    loadPackages({ 
-      query: searchQuery.trim() || undefined,
-      limit: 20 
-    });
-  };
-
-  // Handle sort change
-  const handleSortChange = (newSort: string) => {
-    setSortBy(newSort);
-    // Note: API doesn't support sorting yet, but we keep the UI ready
-    loadPackages({ 
-      query: searchQuery.trim() || undefined,
-      limit: 20 
-    });
-  };
-
   // Load more packages
-  const loadMore = async () => {
-    if (!hasMore || loading) return;
+  const loadMore = useCallback(async () => {
+    if (!hasMore || loading || loadingMore) return;
     
     try {
-      setLoading(true);
+      setLoadingMore(true);
+      setError(null);
       const result = await fetchBrowsePackages({ 
         query: searchQuery.trim() || undefined,
         limit: 20,
@@ -72,8 +87,81 @@ export default function BrowsePage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load more packages');
     } finally {
-      setLoading(false);
+      setLoadingMore(false);
     }
+  }, [hasMore, loading, loadingMore, searchQuery, packages.length]);
+
+  // Initial load with proper pagination
+  useEffect(() => {
+    loadPackages({ limit: 20 });
+  }, []);
+
+  // Infinite scroll observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasMore && !loading && !loadingMore) {
+          loadMore();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '100px',
+      }
+    );
+
+    const currentObserverRef = observerRef.current;
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
+    }
+
+    return () => {
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
+      }
+    };
+  }, [hasMore, loading, loadingMore, loadMore]);
+
+  // Search effect - triggers debounced search when query changes
+  useEffect(() => {
+    debouncedSearch(searchQuery);
+    
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery, debouncedSearch]);
+
+  // Handle search form submission (immediate search)
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Clear any pending debounced search
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    // Perform immediate search
+    lastSearchQueryRef.current = searchQuery;
+    loadPackages({ 
+      query: searchQuery.trim() || undefined,
+      limit: 20 
+    }, true);
+  };
+
+  // Handle sort change
+  const handleSortChange = (newSort: string) => {
+    setSortBy(newSort);
+    // Clear any pending search timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    // Note: API doesn't support sorting yet, but we keep the UI ready
+    lastSearchQueryRef.current = searchQuery;
+    loadPackages({ 
+      query: searchQuery.trim() || undefined,
+      limit: 20 
+    });
   };
 
   return (
@@ -93,7 +181,11 @@ export default function BrowsePage() {
         <div className="mb-8 space-y-4">
           <form onSubmit={handleSearch}>
             <div className="relative">
-              <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              {isSearching ? (
+                <Loader2 size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#007BFF] animate-spin" />
+              ) : (
+                <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              )}
               <input
                 type="text"
                 placeholder="Search packages..."
@@ -224,23 +316,22 @@ export default function BrowsePage() {
           </div>
         )}
 
-        {/* Load more */}
-        {!loading && !error && hasMore && (
-          <div className="text-center mt-8">
-            <button
-              onClick={loadMore}
-              disabled={loading}
-              className="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin h-4 w-4 inline mr-2" />
-                  Loading...
-                </>
-              ) : (
-                'Load more packages'
-              )}
-            </button>
+        {/* Infinite scroll trigger and loading indicator */}
+        {!error && hasMore && (
+          <div ref={observerRef} className="text-center mt-8 py-4">
+            {loadingMore && (
+              <div className="flex items-center justify-center">
+                <Loader2 className="animate-spin h-6 w-6 text-[#007BFF]" />
+                <span className="ml-2 text-gray-600">Loading more packages...</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* End of results indicator */}
+        {!loading && !error && packages.length > 0 && !hasMore && (
+          <div className="text-center mt-8 py-4">
+            <p className="text-gray-500">You've reached the end of the results</p>
           </div>
         )}
       </div>

@@ -1,0 +1,19 @@
+apiVersion: v2
+name: cvibe-hub
+description: CVibe Hub - The npm for AI Prompts (Frontend)
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - hub
+  - frontend
+  - nextjs
+  - prompts
+  - ai
+  - kubernetes
+home: https://cvibe.dev
+sources:
+  - https://github.com/cvibe/cvibe-hub
+maintainers:
+  - name: CVibe Team
+    email: team@cvibe.dev

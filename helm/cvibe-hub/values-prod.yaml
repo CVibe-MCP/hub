@@ -1,0 +1,40 @@
+# Production values for cvibe-hub
+
+image:
+  repository: us-east1-docker.pkg.dev/cvibe-471219/cvibe-api/cvibe-hub
+  tag: latest
+  pullPolicy: Always
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+  hosts:
+    - host: cvibe.dev
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: cvibe-dev-tls
+      hosts:
+        - cvibe.dev
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+env:
+  NODE_ENV: "production"
+  NEXT_PUBLIC_API_URL: "http://cvibe-api:80/api/v1"
+
+# External Secrets configuration (production only)
+externalSecrets:
+  enabled: true
+  refreshInterval: "1m"

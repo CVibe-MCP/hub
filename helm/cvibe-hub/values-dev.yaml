@@ -1,0 +1,16 @@
+# Development values for cvibe-hub
+
+image:
+  tag: "dev"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+env:
+  NODE_ENV: "development"
+  NEXT_PUBLIC_API_URL: "http://localhost:3000/api/v1"

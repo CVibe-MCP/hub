@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cvibe-hub.fullname" . }}
+  labels:
+    {{- include "cvibe-hub.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "cvibe-hub.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "cvibe-hub.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ .Values.serviceAccount.name | default "cvibe-hub" }}
+      {{- else }}
+      serviceAccountName: default
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+            # API URL configuration
+            - name: NEXT_PUBLIC_API_URL
+              value: {{ .Values.env.NEXT_PUBLIC_API_URL | default "https://api.cvibe.dev/api/v1" | quote }}
+            # Mailchimp secrets from External Secrets or Kubernetes secrets
+            {{- if .Values.externalSecrets.enabled }}
+            - name: MAILCHIMP_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cvibe-hub.fullname" . }}-gcp-secrets
+                  key: MAILCHIMP_API_KEY
+            - name: MAILCHIMP_SERVER_PREFIX
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cvibe-hub.fullname" . }}-gcp-secrets
+                  key: MAILCHIMP_SERVER_PREFIX
+            - name: MAILCHIMP_AUDIENCE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cvibe-hub.fullname" . }}-gcp-secrets
+                  key: MAILCHIMP_AUDIENCE_ID
+            {{- else }}
+            - name: MAILCHIMP_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cvibe-hub.fullname" . }}-secret
+                  key: MAILCHIMP_API_KEY
+            - name: MAILCHIMP_SERVER_PREFIX
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cvibe-hub.fullname" . }}-secret
+                  key: MAILCHIMP_SERVER_PREFIX
+            - name: MAILCHIMP_AUDIENCE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cvibe-hub.fullname" . }}-secret
+                  key: MAILCHIMP_AUDIENCE_ID
+            {{- end }}
+            # Kubernetes metadata
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: KUBERNETES_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: KUBERNETES_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          {{- if .Values.healthCheck.enabled }}
+          livenessProbe:
+            {{- toYaml .Values.healthCheck.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.healthCheck.readinessProbe | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

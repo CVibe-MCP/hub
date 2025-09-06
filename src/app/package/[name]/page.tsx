@@ -40,6 +40,11 @@ export default function PackagePage({ params }: PageProps) {
     resolveParams();
   }, [params]);
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     if (!decodedName) return;
     const fetchPackage = async () => {

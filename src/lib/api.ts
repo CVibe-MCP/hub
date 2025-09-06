@@ -107,6 +107,7 @@ export function transformApiPromptToBrowsePackage(apiPrompt: ApiPromptResponse):
     category: content.cvibe.category,
     difficulty: content.cvibe.difficulty,
     license: content.license || 'MIT',
+    downloads: apiPrompt.downloads,
   };
 }
 

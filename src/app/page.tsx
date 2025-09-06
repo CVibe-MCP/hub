@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Package, Users, Code, ArrowRight, Mail } from 'lucide-react';
+import { Search, Package, Users, Code, ArrowRight, Mail, Download } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { fetchBrowsePackages } from '@/lib/api';
 import { BrowsePackage } from '@/lib/types';
@@ -246,7 +246,13 @@ export default function Home() {
                     >
                       View details →
                     </Link>
-                    <span className="text-xs text-gray-500">by {pkg.author}</span>
+                    <div className="flex items-center space-x-3 text-xs text-gray-500">
+                      <div className="flex items-center space-x-1">
+                        <Download size={12} />
+                        <span>{pkg.downloads}</span>
+                      </div>
+                      <span>by {pkg.author}</span>
+                    </div>
                   </div>
                 </div>
               ))

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Filter, Download, Calendar, AlertCircle, Loader2, User, Folder, FileText } from 'lucide-react';
+import { Search, Filter, Download, Calendar, AlertCircle, Loader2, User, Folder, FileText, Download as DownloadIcon } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { fetchBrowsePackages } from '@/lib/api';
@@ -307,6 +307,10 @@ function BrowsePageContent() {
                       <div className="flex items-center space-x-1">
                         <Calendar size={16} />
                         <span>Updated {pkg.updated}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <DownloadIcon size={16} />
+                        <span>{pkg.downloads} downloads</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <FileText size={16} />

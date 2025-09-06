@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Package, Calendar, User, Code2, Copy, Loader2, AlertCircle, Check } from 'lucide-react';
+import { Package, Calendar, User, Code2, Copy, Loader2, AlertCircle, Check, Download } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -236,6 +236,10 @@ export default function PackagePage({ params }: PageProps) {
                   <span>{content.author}</span>
                 </div>
                 <div className="flex items-center space-x-1">
+                  <Download size={16} />
+                  <span>{packageData.downloads} downloads</span>
+                </div>
+                <div className="flex items-center space-x-1">
                   <Package size={16} />
                   <span>{cvibe.category}</span>
                 </div>
@@ -376,6 +380,10 @@ export default function PackagePage({ params }: PageProps) {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Category</span>
                     <span className="font-medium">{cvibe.category}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Downloads</span>
+                    <span className="font-medium">{packageData.downloads}</span>
                   </div>
                 </div>
               </div>

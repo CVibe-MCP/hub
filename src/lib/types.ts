@@ -36,6 +36,7 @@ export interface ApiPromptResponse {
   name: string;
   readme: string;
   content: ApiPromptContent;
+  downloads: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -58,6 +59,7 @@ export interface BrowsePackage {
   category: string;
   difficulty: string;
   license: string;
+  downloads: number;
 }
 
 // Search/Filter types

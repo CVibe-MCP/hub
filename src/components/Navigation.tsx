@@ -1,19 +1,33 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Search, Package, Plus, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const navItems = [
     { href: '/browse', label: 'Browse packages' },
     { href: '/docs', label: 'Docs' },
     { href: 'https://discord.gg/xtzRyfky', label: 'Community', external: true },
   ];
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const query = searchQuery.trim();
+    if (query) {
+      router.push(`/browse?search=${encodeURIComponent(query)}`);
+    } else {
+      router.push('/browse');
+    }
+    setSearchQuery('');
+    setMobileMenuOpen(false);
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 overflow-hidden">
@@ -52,14 +66,18 @@ export default function Navigation() {
 
           {/* Desktop Search */}
           <div className="hidden md:flex items-center">
-            <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search packages"
-                className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF] w-48 text-sm"
-              />
-            </div>
+            <form onSubmit={handleSearch}>
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search packages"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF] w-48 text-sm"
+                />
+              </div>
+            </form>
           </div>
 
           {/* Mobile menu button */}
@@ -93,14 +111,18 @@ export default function Navigation() {
               
               {/* Mobile Search */}
               <div className="px-3 py-2">
-                <div className="relative">
-                  <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search packages"
-                    className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF] text-sm"
-                  />
-                </div>
+                <form onSubmit={handleSearch}>
+                  <div className="relative">
+                    <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Search packages"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF] text-sm"
+                    />
+                  </div>
+                </form>
               </div>
             </div>
           </div>

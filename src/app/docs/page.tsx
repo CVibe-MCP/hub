@@ -1,11 +1,64 @@
 'use client';
 
 import Link from 'next/link';
-import { Download, Package, Code, Upload, ChevronRight, ExternalLink, Copy, Clock, Terminal } from 'lucide-react';
+import { Download, Package, Code, Upload, ChevronRight, ExternalLink, Copy, Clock, Terminal, Check } from 'lucide-react';
 import { useState } from 'react';
 
 export default function DocsPage() {
   const [activeTab, setActiveTab] = useState('claude');
+  const [copyStates, setCopyStates] = useState<{
+    claude: boolean;
+    cursor: boolean;
+  }>({ claude: false, cursor: false });
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  
+  // Helper function to show toast and update copy state
+  const showCopyFeedback = (type: 'claude' | 'cursor', message: string) => {
+    setCopyStates(prev => ({ ...prev, [type]: true }));
+    setToastMessage(message);
+    
+    // Reset copy state after 2 seconds
+    setTimeout(() => {
+      setCopyStates(prev => ({ ...prev, [type]: false }));
+    }, 2000);
+    
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  };
+
+  const handleCopyClaude = async () => {
+    try {
+      await navigator.clipboard.writeText('claude mcp add --transport http cvibe https://mcp.cvibe.dev/');
+      showCopyFeedback('claude', 'Claude command copied to clipboard!');
+    } catch (err) {
+      setToastMessage('Failed to copy to clipboard');
+      setTimeout(() => setToastMessage(null), 3000);
+    }
+  };
+
+  const handleCopyCursor = async () => {
+    try {
+      const cursorConfig = `{
+  "mcpServers": {
+    "cvibe": {
+        "command": "npx",
+        "args": [
+          "mcp-remote",
+          "https://mcp.cvibe.dev/mcp"
+        ]
+      }
+  }
+}
+`;
+      await navigator.clipboard.writeText(cursorConfig);
+      showCopyFeedback('cursor', 'Cursor config copied to clipboard!');
+    } catch (err) {
+      setToastMessage('Failed to copy to clipboard');
+      setTimeout(() => setToastMessage(null), 3000);
+    }
+  };
   
   return (
     <div className="min-h-screen bg-white">
@@ -90,8 +143,16 @@ export default function DocsPage() {
                 <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm mb-4">
                   <div className="flex items-center justify-between mb-3">
                     <div className="text-gray-400"># Add cvibe MCP server</div>
-                    <button className="text-gray-400 hover:text-white transition-colors" title="Copy to clipboard">
-                      <Copy size={14} />
+                    <button 
+                      onClick={handleCopyClaude}
+                      className={`transition-colors ${
+                        copyStates.claude 
+                          ? 'text-green-400' 
+                          : 'text-gray-400 hover:text-white'
+                      }`} 
+                      title="Copy to clipboard"
+                    >
+                      {copyStates.claude ? <Check size={14} /> : <Copy size={14} />}
                     </button>
                   </div>
                   <pre className="text-white leading-relaxed">
@@ -113,18 +174,31 @@ export default function DocsPage() {
                 <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm mb-4">
                   <div className="flex items-center justify-between mb-3">
                     <div className="text-gray-400"># Add to your MCP config file</div>
-                    <button className="text-gray-400 hover:text-white transition-colors" title="Copy to clipboard">
-                      <Copy size={14} />
+                    <button 
+                      onClick={handleCopyCursor}
+                      className={`transition-colors ${
+                        copyStates.cursor 
+                          ? 'text-green-400' 
+                          : 'text-gray-400 hover:text-white'
+                      }`} 
+                      title="Copy to clipboard"
+                    >
+                      {copyStates.cursor ? <Check size={14} /> : <Copy size={14} />}
                     </button>
                   </div>
                   <pre className="text-white leading-relaxed">
 {`{
   "mcpServers": {
     "cvibe": {
-      "url": "https://mcp.cvibe.dev"
-    }
+        "command": "npx",
+        "args": [
+          "mcp-remote",
+          "https://mcp.cvibe.dev/mcp"
+        ]
+      }
   }
-}`}
+}
+`}
                   </pre>
                 </div>
                 <div className="bg-green-50 border border-green-200 rounded p-3 text-sm">
@@ -340,6 +414,14 @@ export default function DocsPage() {
 
           </div>
         </div>
+
+        {/* Toast Notification */}
+        {toastMessage && (
+          <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-3 rounded-lg shadow-lg flex items-center space-x-2 z-50 animate-in slide-in-from-bottom-2 duration-300">
+            <Check size={16} className="text-green-400" />
+            <span className="text-sm">{toastMessage}</span>
+          </div>
+        )}
       </div>
     </div>
   );

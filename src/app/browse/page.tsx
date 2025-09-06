@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { Search, Filter, Download, Calendar, AlertCircle, Loader2, User, Folder, FileText } from 'lucide-react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { fetchBrowsePackages } from '@/lib/api';
 import { BrowsePackage, SearchFilters } from '@/lib/types';
 
-export default function BrowsePage() {
+function BrowsePageContent() {
+  const searchParams = useSearchParams();
   const [packages, setPackages] = useState<BrowsePackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -91,9 +93,22 @@ export default function BrowsePage() {
     }
   }, [hasMore, loading, loadingMore, searchQuery, packages.length]);
 
-  // Initial load with proper pagination
+  // Handle URL search parameters
   useEffect(() => {
-    loadPackages({ limit: 20 });
+    const urlSearchQuery = searchParams.get('search') || '';
+    setSearchQuery(urlSearchQuery);
+    lastSearchQueryRef.current = urlSearchQuery;
+    loadPackages({ 
+      query: urlSearchQuery.trim() || undefined,
+      limit: 20 
+    });
+  }, [searchParams]);
+
+  // Initial load with proper pagination (only if no search params)
+  useEffect(() => {
+    if (!searchParams.get('search')) {
+      loadPackages({ limit: 20 });
+    }
   }, []);
 
   // Infinite scroll observer
@@ -336,5 +351,22 @@ export default function BrowsePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function BrowsePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="animate-spin h-8 w-8 text-[#007BFF]" />
+            <span className="ml-2 text-gray-600">Loading...</span>
+          </div>
+        </div>
+      </div>
+    }>
+      <BrowsePageContent />
+    </Suspense>
   );
 }

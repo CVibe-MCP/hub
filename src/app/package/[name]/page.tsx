@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Package, Calendar, User, Code2, Copy, Loader2, AlertCircle } from 'lucide-react';
+import { Package, Calendar, User, Code2, Copy, Loader2, AlertCircle, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -22,6 +22,12 @@ export default function PackagePage({ params }: PageProps) {
   const [packageData, setPackageData] = useState<ApiPromptResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copyStates, setCopyStates] = useState<{
+    install: boolean;
+    id: boolean;
+    usage: boolean;
+  }>({ install: false, id: false, usage: false });
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Handle async params
   useEffect(() => {
@@ -151,12 +157,50 @@ export default function PackagePage({ params }: PageProps) {
     timeAgo = years === 1 ? '1 year ago' : `${years} years ago`;
   }
 
-  const handleCopyInstall = () => {
-    navigator.clipboard.writeText(`cvibe get ${packageData.id}`);
+  // Helper function to show toast and update copy state
+  const showCopyFeedback = (type: 'install' | 'id' | 'usage', message: string) => {
+    setCopyStates(prev => ({ ...prev, [type]: true }));
+    setToastMessage(message);
+    
+    // Reset copy state after 2 seconds
+    setTimeout(() => {
+      setCopyStates(prev => ({ ...prev, [type]: false }));
+    }, 2000);
+    
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
   };
 
-  const handleCopyId = () => {
-    navigator.clipboard.writeText(packageData.id);
+  const handleCopyInstall = async () => {
+    try {
+      await navigator.clipboard.writeText(`cvibe get ${packageData?.id}`);
+      showCopyFeedback('install', 'Install command copied to clipboard!');
+    } catch (err) {
+      setToastMessage('Failed to copy to clipboard');
+      setTimeout(() => setToastMessage(null), 3000);
+    }
+  };
+
+  const handleCopyId = async () => {
+    try {
+      await navigator.clipboard.writeText(packageData?.id || '');
+      showCopyFeedback('id', 'Package ID copied to clipboard!');
+    } catch (err) {
+      setToastMessage('Failed to copy to clipboard');
+      setTimeout(() => setToastMessage(null), 3000);
+    }
+  };
+
+  const handleCopyUsage = async () => {
+    try {
+      await navigator.clipboard.writeText(`cvibe get ${packageData?.id}`);
+      showCopyFeedback('usage', 'Usage command copied to clipboard!');
+    } catch (err) {
+      setToastMessage('Failed to copy to clipboard');
+      setTimeout(() => setToastMessage(null), 3000);
+    }
   };
 
   return (
@@ -200,17 +244,25 @@ export default function PackagePage({ params }: PageProps) {
               <div className="space-y-2">
                 <button 
                   onClick={handleCopyInstall}
-                  className="w-full bg-[#007BFF] text-white px-4 py-2 rounded-lg hover:bg-[#0056CC] transition-colors flex items-center justify-center space-x-2"
+                  className={`w-full px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
+                    copyStates.install 
+                      ? 'bg-green-500 text-white' 
+                      : 'bg-[#007BFF] text-white hover:bg-[#0056CC]'
+                  }`}
                 >
-                  <Copy size={16} />
-                  <span>Copy Install</span>
+                  {copyStates.install ? <Check size={16} /> : <Copy size={16} />}
+                  <span>{copyStates.install ? 'Copied!' : 'Copy Install'}</span>
                 </button>
                 <button 
                   onClick={handleCopyId}
-                  className="w-full border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2"
+                  className={`w-full px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
+                    copyStates.id
+                      ? 'bg-green-50 border-green-300 text-green-700'
+                      : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
                 >
-                  <Code2 size={16} />
-                  <span>Copy ID</span>
+                  {copyStates.id ? <Check size={16} /> : <Code2 size={16} />}
+                  <span>{copyStates.id ? 'Copied!' : 'Copy ID'}</span>
                 </button>
               </div>
             </div>
@@ -230,11 +282,15 @@ export default function PackagePage({ params }: PageProps) {
                     <code className="text-gray-900 font-medium">cvibe get {packageData.id}</code>
                   </div>
                   <button 
-                    onClick={handleCopyInstall}
-                    className="text-gray-500 hover:text-gray-700 transition-colors"
+                    onClick={handleCopyUsage}
+                    className={`transition-colors ${
+                      copyStates.usage 
+                        ? 'text-green-600' 
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
                     title="Copy to clipboard"
                   >
-                    <Copy size={16} />
+                    {copyStates.usage ? <Check size={16} /> : <Copy size={16} />}
                   </button>
                 </div>
               </div>
@@ -388,7 +444,7 @@ export default function PackagePage({ params }: PageProps) {
                   {cvibe.tags.map((tag) => (
                     <Link
                       key={tag}
-                      href={`/browse?q=${tag}`}
+                      href={`/browse?search=${encodeURIComponent(tag)}`}
                       className="bg-blue-50 text-[#007BFF] px-2 py-1 rounded text-xs hover:bg-blue-100 transition-colors"
                     >
                       {tag}
@@ -399,6 +455,14 @@ export default function PackagePage({ params }: PageProps) {
             </div>
           </div>
         </div>
+
+        {/* Toast Notification */}
+        {toastMessage && (
+          <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-3 rounded-lg shadow-lg flex items-center space-x-2 z-50 animate-in slide-in-from-bottom-2 duration-300">
+            <Check size={16} className="text-green-400" />
+            <span className="text-sm">{toastMessage}</span>
+          </div>
+        )}
       </div>
     </div>
   );

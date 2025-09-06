@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Package, Calendar, User, Code2, Copy, Loader2, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { apiClient } from '@/lib/api';
 import { ApiPromptResponse } from '@/lib/types';
 
@@ -241,9 +243,41 @@ export default function PackagePage({ params }: PageProps) {
             {/* README */}
             <div className="mb-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">README</h2>
-              <div className="prose max-w-none">
-                <div className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed bg-gray-50 border border-gray-200 rounded-lg p-4">
-                  {packageData.readme}
+              <div className="prose prose-sm max-w-none bg-white border border-gray-200 rounded-lg p-6">
+                <div className="markdown-content">
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      h1: ({...props}) => <h1 className="text-2xl font-bold text-gray-900 mb-4 mt-6 first:mt-0" {...props} />,
+                      h2: ({...props}) => <h2 className="text-xl font-semibold text-gray-900 mb-3 mt-5 first:mt-0" {...props} />,
+                      h3: ({...props}) => <h3 className="text-lg font-semibold text-gray-900 mb-2 mt-4 first:mt-0" {...props} />,
+                      h4: ({...props}) => <h4 className="text-base font-semibold text-gray-900 mb-2 mt-3 first:mt-0" {...props} />,
+                      p: ({...props}) => <p className="text-gray-700 mb-4 leading-relaxed" {...props} />,
+                      ul: ({...props}) => <ul className="list-disc list-inside mb-4 text-gray-700 space-y-1" {...props} />,
+                      ol: ({...props}) => <ol className="list-decimal list-inside mb-4 text-gray-700 space-y-1" {...props} />,
+                      li: ({...props}) => <li className="leading-relaxed" {...props} />,
+                      code: ({...props}) => {
+                        const { children, className } = props;
+                        const isInline = !className || !className.includes('language-');
+                        return isInline ? (
+                          <code className="bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm font-mono" {...props} />
+                        ) : (
+                          <code className="block bg-gray-50 text-gray-800 p-3 rounded-lg text-sm font-mono overflow-x-auto" {...props} />
+                        );
+                      },
+                      pre: ({...props}) => <pre className="bg-gray-50 border border-gray-200 rounded-lg p-4 overflow-x-auto mb-4" {...props} />,
+                      blockquote: ({...props}) => <blockquote className="border-l-4 border-blue-200 pl-4 italic text-gray-600 mb-4" {...props} />,
+                      a: ({...props}) => <a className="text-blue-600 hover:text-blue-800 underline" {...props} />,
+                      strong: ({...props}) => <strong className="font-semibold text-gray-900" {...props} />,
+                      em: ({...props}) => <em className="italic" {...props} />,
+                      table: ({...props}) => <table className="min-w-full border border-gray-200 rounded-lg mb-4" {...props} />,
+                      thead: ({...props}) => <thead className="bg-gray-50" {...props} />,
+                      th: ({...props}) => <th className="border border-gray-200 px-4 py-2 text-left font-semibold text-gray-900" {...props} />,
+                      td: ({...props}) => <td className="border border-gray-200 px-4 py-2 text-gray-700" {...props} />,
+                    }}
+                  >
+                    {packageData.readme}
+                  </ReactMarkdown>
                 </div>
               </div>
             </div>

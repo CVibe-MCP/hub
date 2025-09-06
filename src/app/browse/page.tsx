@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Filter, Download, Calendar, AlertCircle, Loader2 } from 'lucide-react';
+import { Search, Filter, Download, Calendar, AlertCircle, Loader2, User, Folder, FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { fetchBrowsePackages } from '@/lib/api';
 import { BrowsePackage, SearchFilters } from '@/lib/types';
@@ -190,17 +190,20 @@ export default function BrowsePage() {
                     
                     <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
                       <div className="flex items-center space-x-1">
-                        <span>👤 {pkg.author}</span>
+                        <User size={16} />
+                        <span>{pkg.author}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <span>📂 {pkg.category}</span>
+                        <Folder size={16} />
+                        <span>{pkg.category}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Calendar size={16} />
                         <span>Updated {pkg.updated}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <span>📄 {pkg.license}</span>
+                        <FileText size={16} />
+                        <span>{pkg.license}</span>
                       </div>
                     </div>
                     

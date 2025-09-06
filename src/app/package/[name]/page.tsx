@@ -219,14 +219,14 @@ export default function PackagePage({ params }: PageProps) {
             <span className="font-medium">{packageData.name}</span>
           </div>
           
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col lg:flex-row lg:items-start justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 {packageData.name}
               </h1>
               <p className="text-gray-600 text-lg mb-4">{content.description}</p>
               
-              <div className="flex items-center space-x-6 text-sm text-gray-600">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-600">
                 <div className="flex items-center space-x-1">
                   <Calendar size={16} />
                   <span>Updated {timeAgo}</span>
@@ -246,14 +246,14 @@ export default function PackagePage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="text-right">
+            <div className="text-right mt-4 lg:mt-0 lg:ml-8 flex-shrink-0">
               <div className="text-lg font-semibold text-gray-900 mb-2">
                 {cvibe.difficulty}
               </div>
               <div className="space-y-2">
                 <button 
                   onClick={handleCopyInstall}
-                  className={`w-full px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
+                  className={`w-full min-w-[140px] px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
                     copyStates.install 
                       ? 'bg-green-500 text-white' 
                       : 'bg-[#007BFF] text-white hover:bg-[#0056CC]'
@@ -264,7 +264,7 @@ export default function PackagePage({ params }: PageProps) {
                 </button>
                 <button 
                   onClick={handleCopyId}
-                  className={`w-full px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
+                  className={`w-full min-w-[140px] px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
                     copyStates.id
                       ? 'bg-green-50 border-green-300 text-green-700'
                       : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -284,11 +284,11 @@ export default function PackagePage({ params }: PageProps) {
             {/* Usage */}
             <div className="mb-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Usage</h2>
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 font-mono">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 font-mono overflow-x-auto">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                     <span className="text-gray-500 text-sm">Ask your AI:</span>
-                    <code className="text-gray-900 font-medium">cvibe get {packageData.id}</code>
+                    <code className="text-gray-900 font-medium break-all">cvibe get {packageData.id}</code>
                   </div>
                   <button 
                     onClick={handleCopyUsage}
@@ -350,8 +350,8 @@ export default function PackagePage({ params }: PageProps) {
             {/* Prompt Content */}
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-4">Prompt Content</h2>
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <pre className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 overflow-x-auto">
+                <pre className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed break-words">
                   {content.prompt}
                 </pre>
               </div>
@@ -367,7 +367,7 @@ export default function PackagePage({ params }: PageProps) {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">ID</span>
-                    <code className="text-xs bg-gray-100 px-1 rounded">{packageData.id}</code>
+                    <code className="text-xs bg-gray-100 px-1 rounded break-all">{packageData.id}</code>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">License</span>
@@ -396,7 +396,7 @@ export default function PackagePage({ params }: PageProps) {
                     {cvibe.models.recommended.length > 0 && (
                       <div>
                         <span className="text-gray-600 block mb-1">Recommended:</span>
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-1 max-w-full">
                           {cvibe.models.recommended.map((model) => (
                             <span
                               key={model}
@@ -411,7 +411,7 @@ export default function PackagePage({ params }: PageProps) {
                     {cvibe.models.compatible.length > 0 && (
                       <div>
                         <span className="text-gray-600 block mb-1">Compatible:</span>
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex flex-wrap gap-1 max-w-full">
                           {cvibe.models.compatible.map((model) => (
                             <span
                               key={model}

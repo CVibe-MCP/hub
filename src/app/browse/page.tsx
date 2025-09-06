@@ -211,9 +211,9 @@ function BrowsePageContent() {
             </div>
           </form>
           
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button className="inline-flex items-center space-x-2 bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <button className="inline-flex items-center justify-center space-x-2 bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors">
                 <Filter size={16} />
                 <span>Filter</span>
               </button>
@@ -285,7 +285,7 @@ function BrowsePageContent() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 hover:text-[#007BFF]">
+                      <h3 className="text-lg font-semibold text-gray-900 hover:text-[#007BFF] break-words">
                         {pkg.name}
                       </h3>
                       <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
@@ -293,28 +293,28 @@ function BrowsePageContent() {
                       </span>
                     </div>
                     
-                    <p className="text-gray-600 mb-3">{pkg.description}</p>
+                    <p className="text-gray-600 mb-3 break-words">{pkg.description}</p>
                     
-                    <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 text-sm text-gray-500 mb-3">
                       <div className="flex items-center space-x-1">
-                        <User size={16} />
-                        <span>{pkg.author}</span>
+                        <User size={16} className="flex-shrink-0" />
+                        <span className="truncate">{pkg.author}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <Folder size={16} />
-                        <span>{pkg.category}</span>
+                        <Folder size={16} className="flex-shrink-0" />
+                        <span className="truncate">{pkg.category}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <Calendar size={16} />
-                        <span>Updated {pkg.updated}</span>
+                        <Calendar size={16} className="flex-shrink-0" />
+                        <span className="truncate">Updated {pkg.updated}</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <DownloadIcon size={16} />
-                        <span>{pkg.downloads} downloads</span>
+                        <DownloadIcon size={16} className="flex-shrink-0" />
+                        <span className="truncate">{pkg.downloads} downloads</span>
                       </div>
                       <div className="flex items-center space-x-1">
-                        <FileText size={16} />
-                        <span>{pkg.license}</span>
+                        <FileText size={16} className="flex-shrink-0" />
+                        <span className="truncate">{pkg.license}</span>
                       </div>
                     </div>
                     

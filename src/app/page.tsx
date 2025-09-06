@@ -240,7 +240,10 @@ export default function Home() {
                   </div>
                   <p className="text-sm text-gray-600 mb-4">{pkg.description}</p>
                   <div className="flex items-center justify-between">
-                    <Link href="/browse" className="text-sm text-[#007BFF] hover:text-[#0056CC] font-medium">
+                    <Link 
+                      href={`/package/${encodeURIComponent(pkg.name)}`} 
+                      className="text-sm text-[#007BFF] hover:text-[#0056CC] font-medium"
+                    >
                       View details →
                     </Link>
                     <span className="text-xs text-gray-500">by {pkg.author}</span>

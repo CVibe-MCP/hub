@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Package, Users, Code, ArrowRight, Mail, Download } from 'lucide-react';
+import { Search, Package, Users, Code, ArrowRight, Mail, Download, Plus, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { fetchBrowsePackages } from '@/lib/api';
 import { BrowsePackage } from '@/lib/types';
-import { PromptForm, PromptFormData } from '@/components/PromptForm';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -14,10 +13,6 @@ export default function Home() {
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
   const [featuredPackages, setFeaturedPackages] = useState<BrowsePackage[]>([]);
   const [packagesLoading, setPackagesLoading] = useState(true);
-  
-  // Prompt form state
-  const [isPromptFormSubmitting, setIsPromptFormSubmitting] = useState(false);
-  const [showPromptForm, setShowPromptForm] = useState(true);
 
   // Load featured packages
   useEffect(() => {
@@ -82,29 +77,6 @@ export default function Home() {
     }
   };
 
-  const handlePromptSubmit = async (data: PromptFormData) => {
-    console.log('Prompt form submitted with data:', data);
-    setIsPromptFormSubmitting(true);
-    
-    try {
-      // TODO: Replace with actual API call when backend is ready
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      alert(`Prompt package "${data.name}" created successfully! (Demo - no actual submission yet)`);
-      setShowPromptForm(false);
-    } catch (error) {
-      console.error('Prompt submission error:', error);
-      alert('Failed to create prompt package. Please try again.');
-    } finally {
-      setIsPromptFormSubmitting(false);
-    }
-  };
-
-  const handlePromptCancel = () => {
-    if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
-      setShowPromptForm(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -312,37 +284,42 @@ export default function Home() {
             Connect with developers building better AI workflows with prompts
           </p>
 
-          {/* Prompt Form Section */}
-          {!showPromptForm ? (
-            <div className="mb-12">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
-                <div className="max-w-2xl mx-auto text-center">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    Share Your Prompt
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Have a great prompt that others could benefit from? Share it with the community and help developers build better AI workflows.
-                  </p>
-                  <button
-                    onClick={() => setShowPromptForm(true)}
-                    className="inline-flex items-center space-x-2 bg-[#007BFF] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#0056CC] transition-colors shadow-sm"
+          {/* Create Prompt CTA Section */}
+          <div className="mb-12">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
+              <div className="max-w-2xl mx-auto text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <Sparkles size={32} className="text-white" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Share Your AI Prompts
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Have a great prompt that others could benefit from? Create a reusable prompt package 
+                  and help developers build better AI workflows. Your prompts will be available through 
+                  the Cvibe CLI for the entire community.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link
+                    href="/create"
+                    className="inline-flex items-center justify-center space-x-2 bg-[#007BFF] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#0056CC] transition-colors shadow-sm"
+                  >
+                    <Plus size={20} />
+                    <span>Create Prompt Package</span>
+                  </Link>
+                  <Link
+                    href="/browse"
+                    className="inline-flex items-center justify-center space-x-2 bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors border border-gray-300"
                   >
                     <Package size={20} />
-                    <span>Create Prompt Package</span>
-                  </button>
+                    <span>Browse Packages</span>
+                  </Link>
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="mb-12">
-              <PromptForm
-                isSubmitting={isPromptFormSubmitting}
-                onSubmit={handlePromptSubmit}
-                onCancel={handlePromptCancel}
-                className="max-w-none"
-              />
-            </div>
-          )}
+          </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-blue-50 rounded-lg p-8">

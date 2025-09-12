@@ -12,7 +12,8 @@ export default function Navigation() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const navItems = [
-    { href: '/browse', label: 'Browse packages' },
+    { href: '/browse', label: 'Browse packages', icon: Package },
+    { href: '/create', label: 'Create', icon: Plus },
     { href: '/docs', label: 'Docs' },
     { href: 'https://discord.gg/xtzRyfky', label: 'Community', external: true },
   ];
@@ -48,20 +49,25 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
-                className={`inline-flex items-center space-x-1 text-sm font-medium transition-colors ${
-                  pathname === item.href
-                    ? 'text-[#007BFF]'
-                    : 'text-gray-700 hover:text-[#007BFF]'
-                } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
-              >
-                <span>{item.label}</span>
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
+                  className={`inline-flex items-center space-x-1 text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'text-[#007BFF]'
+                      : 'text-gray-700 hover:text-[#007BFF]'
+                  } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
+                >
+                  {Icon && <Icon size={16} />}
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Desktop Search */}
@@ -93,21 +99,26 @@ export default function Navigation() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="space-y-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
-                  className={`inline-flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors ${
-                    pathname === item.href
-                      ? 'text-[#007BFF]'
-                      : 'text-gray-700 hover:text-[#007BFF]'
-                  } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span>{item.label}</span>
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
+                    className={`inline-flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors ${
+                      isActive
+                        ? 'text-[#007BFF]'
+                        : 'text-gray-700 hover:text-[#007BFF]'
+                    } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {Icon && <Icon size={16} />}
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
               
               {/* Mobile Search */}
               <div className="px-3 py-2">

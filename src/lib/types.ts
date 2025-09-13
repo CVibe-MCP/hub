@@ -48,6 +48,21 @@ export interface ApiPromptsListResponse {
   offset: number;
 }
 
+export interface ApiPromptCreateRequest {
+  name: string;
+  readme: string;
+  content: ApiPromptContent;
+}
+
+export interface ApiPromptCreateResponse {
+  id: string;
+  name: string;
+  readme: string;
+  content: ApiPromptContent;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Transformed types for the UI (simplified for MVP)
 export interface BrowsePackage {
   id: string;

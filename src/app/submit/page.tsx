@@ -193,19 +193,28 @@ export default function SubmitPage() {
             Your prompts will be available through the Cvibe CLI and can be installed 
             by developers worldwide.
           </p>
-          <div className="grid md:grid-cols-3 gap-4 mt-4">
+          <div className="grid md:grid-cols-4 gap-4 mt-4">
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                 <span className="text-blue-600 font-bold">1</span>
               </div>
               <div>
-                <h3 className="font-semibold text-blue-900">Define Your Prompt</h3>
-                <p className="text-sm text-blue-700">Write your prompt template with dynamic variables</p>
+                <h3 className="font-semibold text-blue-900">Write Your Prompt</h3>
+                <p className="text-sm text-blue-700">Start by writing your prompt template with dynamic variables</p>
               </div>
             </div>
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                 <span className="text-blue-600 font-bold">2</span>
+              </div>
+              <div>
+                <h3 className="font-semibold text-blue-900">Add Details</h3>
+                <p className="text-sm text-blue-700">Provide name, description, and author information</p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-blue-600 font-bold">3</span>
               </div>
               <div>
                 <h3 className="font-semibold text-blue-900">Configure Settings</h3>
@@ -214,7 +223,7 @@ export default function SubmitPage() {
             </div>
             <div className="flex items-start space-x-3">
               <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-blue-600 font-bold">3</span>
+                <span className="text-blue-600 font-bold">4</span>
               </div>
               <div>
                 <h3 className="font-semibold text-blue-900">Submit & Share</h3>

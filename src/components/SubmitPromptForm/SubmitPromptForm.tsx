@@ -21,20 +21,20 @@ export interface SubmitPromptFormProps {
 }
 
 /**
- * Wizard step configuration
+ * Wizard step configuration - Prompt Content first for better UX
  */
 const WIZARD_STEPS: WizardStepMeta[] = [
-  {
-    id: 'basic',
-    title: 'Basic Info',
-    description: 'Prompt name, author, and description',
-    icon: FileText
-  },
   {
     id: 'prompt',
     title: 'Prompt Content',
     description: 'Write your prompt and define inputs',
     icon: Code
+  },
+  {
+    id: 'basic',
+    title: 'Basic Info',
+    description: 'Prompt name, author, and description',
+    icon: FileText
   },
   {
     id: 'configuration',
@@ -90,12 +90,12 @@ export const SubmitPromptForm: React.FC<SubmitPromptFormProps> = ({
         showStepNumbers={false}
         allowStepNavigation={true}
       >
-        <FormWizardStep stepId="basic" stepIndex={0}>
-          <BasicInfoStep />
+        <FormWizardStep stepId="prompt" stepIndex={0}>
+          <PromptContentStep />
         </FormWizardStep>
         
-        <FormWizardStep stepId="prompt" stepIndex={1}>
-          <PromptContentStep />
+        <FormWizardStep stepId="basic" stepIndex={1}>
+          <BasicInfoStep />
         </FormWizardStep>
         
         <FormWizardStep stepId="configuration" stepIndex={2}>

@@ -35,7 +35,7 @@ export interface PromptFormData {
  */
 export const defaultFormData: PromptFormData = {
   name: '',
-  description: '',
+  description: '', // Optional field - can be empty
   author: '',
   license: 'MIT',
   prompt: '',
@@ -46,8 +46,8 @@ export const defaultFormData: PromptFormData = {
   difficulty: 'beginner',
   inputs: [], // can be empty array according to schema
   models: {
-    compatible: ['gpt-4'], // min(1) - provide default compatible model
-    recommended: ['gpt-4'] // min(1) - provide default recommended model
+    compatible: ['claude-sonnet-4'], // min(1) - provide default compatible model
+    recommended: ['claude-sonnet-4'] // min(1) - provide default recommended model
   }
 };
 
@@ -94,11 +94,56 @@ export const FRAMEWORKS = [
 export const AI_MODELS = [
   'claude-3.5-sonnet', 'claude-3-opus', 'claude-3-haiku', 'gpt-4', 'gpt-4-turbo',
   'gpt-3.5-turbo', 'gemini-pro', 'gemini-ultra', 'llama-2-70b', 'llama-2-13b',
-  'codellama-34b', 'codellama-13b', 'mistral-7b', 'mixtral-8x7b'
+  'codellama-34b', 'codellama-13b', 'mistral-7b', 'mixtral-8x7b', 'claude-sonnet-4',
 ];
 
 /**
  * Input type options
  */
 export const INPUT_TYPES: Array<ApiPromptInput['type']> = ['string', 'number', 'boolean', 'array', 'object'];
+
+/**
+ * Available license options with human-friendly descriptions
+ */
+export const LICENSES = [
+  { value: 'MIT', description: 'Anyone can use freely' },
+  { value: 'Apache-2.0', description: 'Free use with extra protection' },
+  { value: 'GPL-3.0', description: 'Free but must share improvements' },
+  { value: 'BSD-3-Clause', description: 'Free but must give credit' },
+  { value: 'CC0-1.0', description: 'Belongs to the public' },
+  { value: 'ISC', description: 'Super simple and free' },
+  { value: 'MPL-2.0', description: 'Mix of free and protected' },
+  { value: 'LGPL-3.0', description: 'Free for libraries' },
+  { value: 'Unlicense', description: 'No restrictions at all' },
+];
+
+/**
+ * Difficulty options with descriptive labels
+ */
+export const DIFFICULTY_OPTIONS = [
+  { value: 'beginner', label: 'Beginner-friendly prompt' },
+  { value: 'intermediate', label: 'Good for experienced users' },
+  { value: 'advanced', label: 'Use with care' }
+];
+
+/**
+ * Language options with "Any" option
+ */
+export const LANGUAGE_OPTIONS = [
+  { value: '', label: 'Any programming language' },
+  ...LANGUAGES.map(lang => ({ value: lang, label: lang }))
+];
+
+/**
+ * Framework options with "Any" option
+ */
+export const FRAMEWORK_OPTIONS = [
+  { value: '', label: 'Any software framework' },
+  ...FRAMEWORKS.map(framework => ({ value: framework, label: framework }))
+];
+
+/**
+ * Category options
+ */
+export const CATEGORY_OPTIONS = CATEGORIES.map(category => ({ value: category, label: category }));
 

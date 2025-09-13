@@ -114,21 +114,12 @@ export default function SubmitPage() {
       console.error('Prompt submission error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       alert(`Failed to submit prompt: ${errorMessage}`);
-      throw error; // Re-throw to let FormWizard handle the error state
+      throw error; // Re-throw to let form handle the error state
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleCancel = () => {
-    if (isSubmitting) {
-      return; // Prevent cancellation during submission
-    }
-    
-    if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
-      router.push('/');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
@@ -183,91 +174,39 @@ export default function SubmitPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Introduction */}
-        <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h2 className="text-lg font-semibold text-blue-900 mb-2">
-            Welcome to Cvibe Prompt Submission
-          </h2>
-          <p className="text-blue-800 mb-4">
-            Submit and share reusable AI prompts with the developer community. 
-            Your prompts will be available through the Cvibe CLI and can be installed 
-            by developers worldwide.
+        {/* Minimal Introduction */}
+        <div className="text-center mb-8">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Got a great prompt? Share it with the developer community and help others build better AI workflows.
           </p>
-          <div className="grid md:grid-cols-4 gap-4 mt-4">
-            <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-blue-600 font-bold">1</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-blue-900">Write Your Prompt</h3>
-                <p className="text-sm text-blue-700">Start by writing your prompt template with dynamic variables</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-blue-600 font-bold">2</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-blue-900">Add Details</h3>
-                <p className="text-sm text-blue-700">Provide name, description, and author information</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-blue-600 font-bold">3</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-blue-900">Configure Settings</h3>
-                <p className="text-sm text-blue-700">Set category, difficulty, and model compatibility</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="text-blue-600 font-bold">4</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-blue-900">Submit & Share</h3>
-                <p className="text-sm text-blue-700">Make it available for the community to use</p>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Form */}
         <div className={isSubmitting ? 'pointer-events-none opacity-50' : ''}>
           <SubmitPromptForm
             onSubmit={handleSubmit}
-            onCancel={handleCancel}
             className="max-w-none"
           />
         </div>
 
-        {/* Help Section */}
-        <div className="mt-12 grid md:grid-cols-2 gap-8">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">
-              📝 Writing Good Prompts
+        {/* Minimal Help Section */}
+        <div className="mt-16 text-center">
+          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-8 max-w-3xl mx-auto">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              💡 Quick tips for great prompts
             </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>• Be clear and specific about the expected output</li>
-              <li>• Use variables ({"{{variable}}"}) for dynamic content</li>
-              <li>• Include examples when helpful</li>
-              <li>• Test with different AI models before publishing</li>
-              <li>• Document any assumptions or prerequisites</li>
-            </ul>
-          </div>
-          
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">
-              🚀 After Submission
-            </h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>• Your prompt will be available via <code className="bg-gray-200 px-1 rounded">cvibe install your-prompt</code></li>
-              <li>• Users can run it with <code className="bg-gray-200 px-1 rounded">cvibe run your-prompt</code></li>
-              <li>• Track usage statistics and feedback</li>
-              <li>• Update and improve based on community input</li>
-              <li>• Earn recognition as a contributor</li>
-            </ul>
+            <div className="grid md:grid-cols-2 gap-6 text-left">
+              <div>
+                <p className="text-gray-700 mb-2"><strong>Be specific:</strong> Clear instructions get better results</p>
+                <p className="text-gray-700 mb-2"><strong>Use examples:</strong> Show what good output looks like</p>
+                <p className="text-gray-700"><strong>Test first:</strong> Try it with different AI models</p>
+              </div>
+              <div>
+                <p className="text-gray-700 mb-2"><strong>Variables:</strong> Use {"{{variable}}"} for dynamic content</p>
+                <p className="text-gray-700 mb-2"><strong>Context:</strong> Explain the use case clearly</p>
+                <p className="text-gray-700"><strong>Keep it simple:</strong> Complex prompts are harder to reuse</p>
+              </div>
+            </div>
           </div>
         </div>
       </main>

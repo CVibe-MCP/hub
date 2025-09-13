@@ -2,34 +2,129 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Package, Sparkles } from 'lucide-react';
+import { ArrowLeft, Package, Sparkles, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import PromptForm, { PromptFormData } from '@/components/PromptForm';
+import { apiClient } from '@/lib/api';
+import { ApiPromptCreateRequest } from '@/lib/types';
 
 export default function CreatePage() {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const transformFormDataToApiRequest = (data: PromptFormData): ApiPromptCreateRequest => {
+    // Build cvibe object with proper optional field handling
+    const cvibeData: any = {
+      tags: data.tags,
+      inputs: data.inputs,
+      models: data.models,
+      category: data.category,
+      difficulty: data.difficulty,
+    };
+
+    // Only include optional fields if they have values
+    if (data.language && data.language.trim()) {
+      cvibeData.language = data.language.trim();
+    }
+    if (data.framework && data.framework.trim()) {
+      cvibeData.framework = data.framework.trim();
+    }
+
+    // Build content object with proper optional field handling
+    const contentData: any = {
+      cvibe: cvibeData,
+      author: data.author,
+      prompt: data.prompt,
+      description: data.description,
+    };
+
+    // Only include optional fields if they have values
+    if (data.license && data.license.trim()) {
+      contentData.license = data.license.trim();
+    }
+
+    return {
+      name: data.name,
+      readme: data.description, // Using description as readme for now
+      content: contentData,
+    };
+  };
+
+  const validateFormData = (data: PromptFormData): string[] => {
+    const errors: string[] = [];
+
+    // Required string fields with min length 1
+    if (!data.name?.trim()) errors.push('Name is required');
+    if (!data.description?.trim()) errors.push('Description is required');
+    if (!data.author?.trim()) errors.push('Author is required');
+    if (!data.prompt?.trim()) errors.push('Prompt content is required');
+    if (!data.category?.trim()) errors.push('Category is required');
+
+    // Required arrays with min items 1
+    if (!data.tags || data.tags.length === 0) {
+      errors.push('At least one tag is required');
+    }
+    if (!data.models?.compatible || data.models.compatible.length === 0) {
+      errors.push('At least one compatible model is required');
+    }
+    if (!data.models?.recommended || data.models.recommended.length === 0) {
+      errors.push('At least one recommended model is required');
+    }
+
+    // Validate inputs array structure
+    if (data.inputs) {
+      data.inputs.forEach((input, index) => {
+        if (!input.name?.trim()) errors.push(`Input ${index + 1}: Name is required`);
+        if (!input.description?.trim()) errors.push(`Input ${index + 1}: Description is required`);
+        if (!['string', 'number', 'boolean', 'array', 'object'].includes(input.type)) {
+          errors.push(`Input ${index + 1}: Invalid type`);
+        }
+      });
+    }
+
+    return errors;
+  };
 
   const handleSubmit = async (data: PromptFormData) => {
-    console.log('Prompt form submitted with data:', data);
+    console.log('Creating prompt package:', data);
+    
+    // Validate form data before submission
+    const validationErrors = validateFormData(data);
+    if (validationErrors.length > 0) {
+      alert(`Please fix the following errors:\n\n• ${validationErrors.join('\n• ')}`);
+      return;
+    }
+
+    setIsCreating(true);
     
     try {
-      // TODO: Replace with actual API call when backend is ready
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Transform form data to API request format
+      const apiRequest = transformFormDataToApiRequest(data);
+      
+      // Call the API to create the prompt
+      const result = await apiClient.createPrompt(apiRequest);
       
       // Show success message
-      alert(`Prompt package "${data.name}" created successfully! (Demo - no actual submission yet)`);
-      
-      // Redirect to browse page or the package page
-      router.push('/browse');
+      const successMessage = `✅ Package "${result.name}" created successfully!`;
+      console.log(successMessage);
+
+      // Redirect to the newly created prompt's detail page
+      router.push(`/package/${result.name}`);
     } catch (error) {
-      console.error('Prompt submission error:', error);
-      alert('Failed to create prompt package. Please try again.');
+      console.error('Prompt creation error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`Failed to create prompt package: ${errorMessage}`);
       throw error; // Re-throw to let FormWizard handle the error state
+    } finally {
+      setIsCreating(false);
     }
   };
 
   const handleCancel = () => {
+    if (isCreating) {
+      return; // Prevent cancellation during creation
+    }
+    
     if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
       router.push('/');
     }
@@ -37,6 +132,24 @@ export default function CreatePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      {/* Loading Overlay */}
+      {isCreating && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
+            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Creating Your Prompt Package
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Please wait while we process and publish your prompt to the registry...
+            </p>
+            <div className="text-sm text-gray-500">
+              This may take a few moments
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,7 +158,9 @@ export default function CreatePage() {
               <div className="flex items-center space-x-4">
                 <Link
                   href="/"
-                  className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+                  className={`inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors ${
+                    isCreating ? 'pointer-events-none opacity-50' : ''
+                  }`}
                 >
                   <ArrowLeft size={20} className="mr-2" />
                   Back to Home
@@ -110,11 +225,13 @@ export default function CreatePage() {
         </div>
 
         {/* Form */}
-        <PromptForm
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-          className="max-w-none"
-        />
+        <div className={isCreating ? 'pointer-events-none opacity-50' : ''}>
+          <PromptForm
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+            className="max-w-none"
+          />
+        </div>
 
         {/* Help Section */}
         <div className="mt-12 grid md:grid-cols-2 gap-8">

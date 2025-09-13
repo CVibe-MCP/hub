@@ -9,20 +9,20 @@ export interface PromptFormData {
   description: string;
   author: string;
   license: string;
-  
+
   // Prompt content
   prompt: string;
-  
+
   // Cvibe configuration
   tags: string[];
   category: string;
   language?: string;
   framework?: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  
+
   // Dynamic inputs
   inputs: ApiPromptInput[];
-  
+
   // Model compatibility
   models: {
     compatible: string[];
@@ -39,15 +39,15 @@ export const defaultFormData: PromptFormData = {
   author: '',
   license: 'MIT',
   prompt: '',
-  tags: [],
-  category: '',
-  language: '',
-  framework: '',
+  tags: ['general'], // min(1) - provide default tag
+  category: 'General', // min(1) - provide default category
+  language: undefined, // optional field should be undefined, not empty string
+  framework: undefined, // optional field should be undefined, not empty string
   difficulty: 'beginner',
-  inputs: [],
+  inputs: [], // can be empty array according to schema
   models: {
-    compatible: [],
-    recommended: []
+    compatible: ['gpt-4'], // min(1) - provide default compatible model
+    recommended: ['gpt-4'] // min(1) - provide default recommended model
   }
 };
 

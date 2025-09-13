@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Search, Package, Plus, Menu, X } from 'lucide-react';
+import { Search, Package, Plus, Menu, X, Book } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navigation() {
@@ -12,9 +12,9 @@ export default function Navigation() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const navItems = [
-    { href: '/browse', label: 'Browse packages', icon: Package },
-    { href: '/create', label: 'Create', icon: Plus },
-    { href: '/docs', label: 'Docs' },
+    { href: '/browse', label: 'Browse prompts', icon: Package },
+    { href: '/docs', label: 'Docs', icon: Book },
+    { href: '/submit', label: 'Submit prompt', icon: Plus },
     { href: 'https://discord.gg/xtzRyfky', label: 'Community', external: true },
   ];
 
@@ -77,7 +77,7 @@ export default function Navigation() {
                 <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search packages"
+                  placeholder="Search prompts"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF] w-48 text-sm"
@@ -127,7 +127,7 @@ export default function Navigation() {
                     <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                     <input
                       type="text"
-                      placeholder="Search packages"
+                      placeholder="Search prompts"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF] text-sm"

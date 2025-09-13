@@ -109,7 +109,7 @@ export default function Home() {
                 <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search packages"
+                  placeholder="Search prompts"
                   className="w-full pl-12 pr-32 py-3 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF]"
                 />
                 <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#007BFF] text-white px-6 py-2 rounded-lg hover:bg-[#0056CC] transition-colors font-medium">
@@ -126,7 +126,7 @@ export default function Home() {
               className="inline-flex items-center space-x-2 bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:border-gray-400 transition-colors"
             >
               <Package size={16} />
-              <span>Browse packages</span>
+              <span>Browse prompts</span>
             </Link>
             <a
               href="https://github.com/CVibe-MCP/"
@@ -155,7 +155,7 @@ export default function Home() {
               <div className="w-12 h-12 bg-blue-50 text-[#007BFF] rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Package size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Reusable packages</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Reusable prompts</h3>
               <p className="text-gray-600">
                 No more copy-pasting prompts. Install and reuse.
               </p>
@@ -297,24 +297,24 @@ export default function Home() {
                   Share Your AI Prompts
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Have a great prompt that others could benefit from? Create a reusable prompt package 
+                  Have a great prompt that others could benefit from? Submit a reusable prompt 
                   and help developers build better AI workflows. Your prompts will be available through 
                   the Cvibe CLI for the entire community.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
-                    href="/create"
+                    href="/submit"
                     className="inline-flex items-center justify-center space-x-2 bg-[#007BFF] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#0056CC] transition-colors shadow-sm"
                   >
                     <Plus size={20} />
-                    <span>Create Prompt Package</span>
+                    <span>Submit Prompt</span>
                   </Link>
                   <Link
                     href="/browse"
                     className="inline-flex items-center justify-center space-x-2 bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors border border-gray-300"
                   >
                     <Package size={20} />
-                    <span>Browse Packages</span>
+                    <span>Browse Prompts</span>
                   </Link>
                 </div>
               </div>

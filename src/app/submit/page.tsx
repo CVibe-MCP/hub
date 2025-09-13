@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Package, Sparkles, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import PromptForm, { PromptFormData } from '@/components/PromptForm';
+import SubmitPromptForm, { PromptFormData } from '@/components/SubmitPromptForm';
 import { apiClient } from '@/lib/api';
 import { ApiPromptCreateRequest } from '@/lib/types';
 
-export default function CreatePage() {
+export default function SubmitPage() {
   const router = useRouter();
-  const [isCreating, setIsCreating] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const transformFormDataToApiRequest = (data: PromptFormData): ApiPromptCreateRequest => {
     // Build cvibe object with proper optional field handling
@@ -86,7 +86,7 @@ export default function CreatePage() {
   };
 
   const handleSubmit = async (data: PromptFormData) => {
-    console.log('Creating prompt package:', data);
+    console.log('Submitting prompt:', data);
     
     // Validate form data before submission
     const validationErrors = validateFormData(data);
@@ -95,7 +95,7 @@ export default function CreatePage() {
       return;
     }
 
-    setIsCreating(true);
+    setIsSubmitting(true);
     
     try {
       // Transform form data to API request format
@@ -105,24 +105,24 @@ export default function CreatePage() {
       const result = await apiClient.createPrompt(apiRequest);
       
       // Show success message
-      const successMessage = `✅ Package "${result.name}" created successfully!`;
+      const successMessage = `✅ Prompt "${result.name}" submitted successfully!`;
       console.log(successMessage);
 
       // Redirect to the newly created prompt's detail page
       router.push(`/package/${result.name}`);
     } catch (error) {
-      console.error('Prompt creation error:', error);
+      console.error('Prompt submission error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      alert(`Failed to create prompt package: ${errorMessage}`);
+      alert(`Failed to submit prompt: ${errorMessage}`);
       throw error; // Re-throw to let FormWizard handle the error state
     } finally {
-      setIsCreating(false);
+      setIsSubmitting(false);
     }
   };
 
   const handleCancel = () => {
-    if (isCreating) {
-      return; // Prevent cancellation during creation
+    if (isSubmitting) {
+      return; // Prevent cancellation during submission
     }
     
     if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
@@ -133,12 +133,12 @@ export default function CreatePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Loading Overlay */}
-      {isCreating && (
+      {isSubmitting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
             <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Creating Your Prompt Package
+              Submitting Your Prompt
             </h3>
             <p className="text-gray-600 mb-4">
               Please wait while we process and publish your prompt to the registry...
@@ -159,7 +159,7 @@ export default function CreatePage() {
                 <Link
                   href="/"
                   className={`inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors ${
-                    isCreating ? 'pointer-events-none opacity-50' : ''
+                    isSubmitting ? 'pointer-events-none opacity-50' : ''
                   }`}
                 >
                   <ArrowLeft size={20} className="mr-2" />
@@ -168,7 +168,7 @@ export default function CreatePage() {
                 <div className="h-6 w-px bg-gray-300" />
                 <div className="flex items-center">
                   <Package className="text-blue-600 mr-2" size={24} />
-                  <h1 className="text-2xl font-bold text-gray-900">Create Prompt Package</h1>
+                  <h1 className="text-2xl font-bold text-gray-900">Submit Prompt</h1>
                 </div>
               </div>
               
@@ -186,10 +186,10 @@ export default function CreatePage() {
         {/* Introduction */}
         <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
           <h2 className="text-lg font-semibold text-blue-900 mb-2">
-            Welcome to Cvibe Package Creator
+            Welcome to Cvibe Prompt Submission
           </h2>
           <p className="text-blue-800 mb-4">
-            Create and share reusable AI prompts with the developer community. 
+            Submit and share reusable AI prompts with the developer community. 
             Your prompts will be available through the Cvibe CLI and can be installed 
             by developers worldwide.
           </p>
@@ -217,7 +217,7 @@ export default function CreatePage() {
                 <span className="text-blue-600 font-bold">3</span>
               </div>
               <div>
-                <h3 className="font-semibold text-blue-900">Publish & Share</h3>
+                <h3 className="font-semibold text-blue-900">Submit & Share</h3>
                 <p className="text-sm text-blue-700">Make it available for the community to use</p>
               </div>
             </div>
@@ -225,8 +225,8 @@ export default function CreatePage() {
         </div>
 
         {/* Form */}
-        <div className={isCreating ? 'pointer-events-none opacity-50' : ''}>
-          <PromptForm
+        <div className={isSubmitting ? 'pointer-events-none opacity-50' : ''}>
+          <SubmitPromptForm
             onSubmit={handleSubmit}
             onCancel={handleCancel}
             className="max-w-none"
@@ -250,11 +250,11 @@ export default function CreatePage() {
           
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-3">
-              🚀 After Publishing
+              🚀 After Submission
             </h3>
             <ul className="space-y-2 text-sm text-gray-600">
-              <li>• Your package will be available via <code className="bg-gray-200 px-1 rounded">cvibe install your-package</code></li>
-              <li>• Users can run it with <code className="bg-gray-200 px-1 rounded">cvibe run your-package</code></li>
+              <li>• Your prompt will be available via <code className="bg-gray-200 px-1 rounded">cvibe install your-prompt</code></li>
+              <li>• Users can run it with <code className="bg-gray-200 px-1 rounded">cvibe run your-prompt</code></li>
               <li>• Track usage statistics and feedback</li>
               <li>• Update and improve based on community input</li>
               <li>• Earn recognition as a contributor</li>

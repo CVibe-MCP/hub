@@ -7,9 +7,9 @@ import { BasicInfoStep, PromptContentStep, ConfigurationStep, TagsAndModelsStep 
 import { PromptFormData, defaultFormData } from './types';
 
 /**
- * Props for the PromptForm component
+ * Props for the SubmitPromptForm component
  */
-export interface PromptFormProps {
+export interface SubmitPromptFormProps {
   /** Initial form data (for editing existing prompts) */
   initialData?: Partial<PromptFormData>;
   /** Callback function called when form is submitted with valid data */
@@ -27,7 +27,7 @@ const WIZARD_STEPS: WizardStepMeta[] = [
   {
     id: 'basic',
     title: 'Basic Info',
-    description: 'Package name, author, and description',
+    description: 'Prompt name, author, and description',
     icon: FileText
   },
   {
@@ -51,14 +51,14 @@ const WIZARD_STEPS: WizardStepMeta[] = [
 ];
 
 /**
- * PromptForm Component - Clean wizard-based form for creating prompt packages
+ * SubmitPromptForm Component - Clean wizard-based form for submitting prompts
  * 
  * This component uses the FormWizard architecture with proper separation of concerns:
  * - FormWizard handles navigation and validation flow
  * - Each step component manages its own validation and UI
  * - State is shared through context for clean data flow
  */
-export const PromptForm: React.FC<PromptFormProps> = ({
+export const SubmitPromptForm: React.FC<SubmitPromptFormProps> = ({
   initialData = {},
   onSubmit,
   onCancel,
@@ -74,9 +74,9 @@ export const PromptForm: React.FC<PromptFormProps> = ({
     <div className={`max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
       {/* Header */}
       <div className="px-8 py-6 border-b border-gray-200">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Create New Prompt Package</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Submit New Prompt</h2>
         <p className="text-gray-600">
-          Follow the steps below to create a new prompt package for the community.
+          Follow the steps below to submit a new prompt for the community.
         </p>
       </div>
       
@@ -86,7 +86,7 @@ export const PromptForm: React.FC<PromptFormProps> = ({
         steps={WIZARD_STEPS}
         onSubmit={onSubmit}
         onCancel={onCancel}
-        submitText="Create Package"
+        submitText="Submit Prompt"
         showStepNumbers={false}
         allowStepNavigation={true}
       >
@@ -110,4 +110,4 @@ export const PromptForm: React.FC<PromptFormProps> = ({
   );
 };
 
-export default PromptForm;
+export default SubmitPromptForm;

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Search, Package, Users, Code, ArrowRight, Mail, Download } from 'lucide-react';
+import { Search, Package, Users, Code, ArrowRight, Mail, Download, Plus, Sparkles } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { fetchBrowsePackages } from '@/lib/api';
 import { BrowsePackage } from '@/lib/types';
@@ -77,6 +77,7 @@ export default function Home() {
     }
   };
 
+
   return (
     <div className="min-h-screen bg-white">
       {/* Main Header - npm style */}
@@ -108,7 +109,7 @@ export default function Home() {
                 <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search packages"
+                  placeholder="Search prompts"
                   className="w-full pl-12 pr-32 py-3 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF]"
                 />
                 <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#007BFF] text-white px-6 py-2 rounded-lg hover:bg-[#0056CC] transition-colors font-medium">
@@ -125,7 +126,7 @@ export default function Home() {
               className="inline-flex items-center space-x-2 bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:border-gray-400 transition-colors"
             >
               <Package size={16} />
-              <span>Browse packages</span>
+              <span>Browse prompts</span>
             </Link>
             <a
               href="https://github.com/CVibe-MCP/"
@@ -154,7 +155,7 @@ export default function Home() {
               <div className="w-12 h-12 bg-blue-50 text-[#007BFF] rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Package size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Reusable packages</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Reusable prompts</h3>
               <p className="text-gray-600">
                 No more copy-pasting prompts. Install and reuse.
               </p>
@@ -275,13 +276,50 @@ export default function Home() {
 
       {/* Community Section */}
       <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+        <div className="max-w-6xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Join the community
           </h2>
-          <p className="text-xl text-gray-600 mb-12">
+          <p className="text-xl text-gray-600 mb-8">
             Connect with developers building better AI workflows with prompts
           </p>
+
+          {/* Create Prompt CTA Section */}
+          <div className="mb-12">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
+              <div className="max-w-2xl mx-auto text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <Sparkles size={32} className="text-white" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Share Your AI Prompts
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Have a great prompt that others could benefit from? Submit a reusable prompt 
+                  and help developers build better AI workflows. Your prompts will be available through 
+                  the Cvibe CLI for the entire community.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link
+                    href="/submit"
+                    className="inline-flex items-center justify-center space-x-2 bg-[#007BFF] text-white px-8 py-3 rounded-lg font-medium hover:bg-[#0056CC] transition-colors shadow-sm"
+                  >
+                    <Plus size={20} />
+                    <span>Submit Prompt</span>
+                  </Link>
+                  <Link
+                    href="/browse"
+                    className="inline-flex items-center justify-center space-x-2 bg-white text-gray-700 px-8 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors border border-gray-300"
+                  >
+                    <Package size={20} />
+                    <span>Browse Prompts</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-blue-50 rounded-lg p-8">

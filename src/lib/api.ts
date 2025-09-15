@@ -1,4 +1,4 @@
-import { ApiPromptsListResponse, ApiPromptResponse, BrowsePackage, SearchFilters } from './types';
+import { ApiPromptsListResponse, ApiPromptResponse, ApiPromptCreateRequest, ApiPromptCreateResponse, BrowsePackage, SearchFilters } from './types';
 
 // API Configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.cvibe.dev/api/v1';
@@ -68,6 +68,13 @@ export class CvibeApiClient {
   async getPrompt(id: string): Promise<ApiPromptResponse> {
     return this.request<ApiPromptResponse>(`/prompts/${id}`);
   }
+
+  async createPrompt(promptData: ApiPromptCreateRequest): Promise<ApiPromptCreateResponse> {
+    return this.request<ApiPromptCreateResponse>('/prompts', {
+      method: 'POST',
+      body: JSON.stringify(promptData),
+    });
+  }
 }
 
 // Transform API response to UI-friendly format
@@ -122,10 +129,10 @@ export async function fetchBrowsePackages(filters: SearchFilters = {}): Promise<
 }> {
   try {
     const response = await apiClient.searchPrompts(filters);
-    
+
     const packages = response.prompts.map(transformApiPromptToBrowsePackage);
     const hasMore = (filters.offset || 0) + packages.length < response.total;
-    
+
     return {
       packages,
       total: response.total,

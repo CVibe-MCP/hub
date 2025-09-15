@@ -381,7 +381,7 @@ export default function DocsPage() {
 
           <div className="grid md:grid-cols-3 gap-6">
             <a
-              href="https://discord.gg/xtzRyfky"
+              href="https://discord.gg/EYwHu9rZ"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center space-x-3 p-6 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow group"

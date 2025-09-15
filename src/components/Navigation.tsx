@@ -15,7 +15,7 @@ export default function Navigation() {
     { href: '/browse', label: 'Browse prompts', icon: Package },
     { href: '/docs', label: 'Read the docs', icon: Book },
     { href: '/submit', label: 'Submit prompt', icon: Plus },
-    { href: 'https://discord.gg/xtzRyfky', label: 'Community', external: true },
+    { href: 'https://discord.gg/EYwHu9rZ', label: 'Community', external: true },
   ];
 
   const handleSearch = (e: React.FormEvent) => {

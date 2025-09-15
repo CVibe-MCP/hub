@@ -6,35 +6,38 @@ import Navigation from "@/components/Navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Cvibe - Like npm, but for prompts",
-  description: "Reusable, standardized, MCP-native prompts. Build better AI workflows with the community. Like npm, but for prompts - discover, publish, and install prompt packages.",
+  title: "cvibe - Free AI Prompt Hub | Share & Discover Prompts for ChatGPT, Claude, Gemini",
+  description: "cvibe is a free, community-driven platform where developers share and discover AI prompts. Like npm for prompts - browse, install, and contribute reusable prompts for ChatGPT, Claude, Gemini. Join the community building better AI workflows.",
   keywords: [
-    "npm for prompts", 
-    "prompt management", 
-    "prompt cli", 
-    "prompt mcp", 
-    "prompt hub", 
-    "ai prompts", 
-    "mcp native", 
-    "prompt packages", 
-    "claude code", 
+    "free prompt management",
+    "ai prompt hub",
+    "free ai prompts",
+    "chatgpt prompts",
+    "claude prompts",
+    "gemini prompts",
+    "prompt sharing platform",
+    "open source prompts",
+    "free prompt library",
+    "prompt versioning",
+    "community prompts",
+    "mcp prompts",
     "cursor prompts",
     "prompt engineering",
-    "ai workflow",
-    "developer tools"
+    "ai workflow tools",
+    "free prompt repository"
   ],
-  authors: [{ name: "Cvibe" }],
+  authors: [{ name: "cvibe Community" }],
   openGraph: {
-    title: "Cvibe - Like npm, but for prompts",
-    description: "Reusable, standardized, MCP-native prompts. Build better AI workflows with the community.",
+    title: "cvibe - Free AI Prompt Hub",
+    description: "Free platform for sharing and discovering AI prompts for ChatGPT, Claude, Gemini. Join the community building better AI workflows.",
     url: "https://cvibe.dev",
-    siteName: "Cvibe",
+    siteName: "cvibe",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cvibe - Like npm, but for prompts",
-    description: "Reusable, standardized, MCP-native prompts. Build better AI workflows with the community.",
+    title: "cvibe - Free AI Prompt Hub",
+    description: "Free platform for sharing AI prompts for ChatGPT, Claude, Gemini. Join the community! 🤖",
   },
   robots: {
     index: true,
@@ -47,8 +50,41 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "cvibe - AI Prompt Hub",
+    "description": "Free platform for sharing and discovering AI prompts for ChatGPT, Claude, Gemini",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Free AI prompt sharing",
+      "Community-driven prompt library",
+      "Version control for prompts",
+      "ChatGPT, Claude, Gemini compatible",
+      "MCP integration",
+      "Open source"
+    ],
+    "url": "https://cvibe.dev",
+    "sameAs": [
+      "https://github.com/cvibe-MCP/",
+      "https://discord.gg/EYwHu9rZ"
+    ]
+  };
+
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body className={`${inter.className} antialiased bg-white`}>
         <Navigation />
         <main>

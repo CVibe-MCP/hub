@@ -16,7 +16,6 @@ export default function Home() {
   const [featuredPackages, setFeaturedPackages] = useState<BrowsePackage[]>([]);
   const [packagesLoading, setPackagesLoading] = useState(true);
   const [currentPackageManager, setCurrentPackageManager] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
   const packageManagers = ['npm', 'pip', 'maven', 'cargo', 'gem', 'composer', 'yarn', 'pnpm', 'go mod', 'poetry'];
@@ -39,15 +38,11 @@ export default function Home() {
     loadFeaturedPackages();
   }, []);
 
-  // Spinning wheel effect for package managers
+  // Simple cycling effect for package managers
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setCurrentPackageManager(prev => (prev + 1) % packageManagers.length);
-        setIsAnimating(false);
-      }, 250); // Change text mid-animation
-    }, 2000); // Change every 2 seconds
+      setCurrentPackageManager(prev => (prev + 1) % packageManagers.length);
+    }, 2500); // Change every 2.5 seconds
 
     return () => clearInterval(interval);
   }, [packageManagers.length]);
@@ -110,23 +105,24 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       {/* Main Header - npm style */}
       <section className="bg-gradient-to-br from-blue-50 to-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-12">
-          <div className="text-center mb-10">
-            <h1 className="text-5xl font-bold text-gray-900 mb-4">
+        <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12">
+          <div className="text-center mb-8 sm:mb-10">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               cvibe - The Free AI Prompt Hub
             </h1>
-            <div className="text-3xl text-gray-700 mb-6">
+            <div className="text-2xl sm:text-3xl text-gray-700 mb-6">
               Like{' '}
-              <span className="inline relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent min-w-fit">
+              <span className="inline relative text-blue-700 font-mono">
                 <span
-                  className={`inline-block whitespace-nowrap ${isAnimating ? 'animate-spin-up' : ''}`}
+                  key={currentPackageManager}
+                  className="inline-block animate-fade-in"
                 >
                   {packageManagers[currentPackageManager]}
                 </span>
               </span>
               , but for AI prompts
             </div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-6 sm:mb-8 px-2">
               Share, discover, and reuse <strong>community-built prompts</strong> for <strong>ChatGPT, Claude, Gemini</strong>, and more.
               100% <strong>free</strong>, <strong>open source</strong>, and <strong>MCP-native</strong>. Join developers building better AI workflows.
             </p>
@@ -144,21 +140,22 @@ export default function Home() {
             </div>
 
             {/* Search Bar - npm style */}
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl mx-auto px-2">
               <form onSubmit={handleSearch} className="relative">
-                <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search free AI prompts for ChatGPT, Claude, Gemini..."
-                  className="w-full pl-12 pr-32 py-3 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF]"
+                  placeholder="Search AI prompts..."
+                  className="w-full pl-12 pr-20 sm:pr-32 py-3 text-base sm:text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#007BFF] focus:border-[#007BFF]"
                 />
                 <button
                   type="submit"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#007BFF] text-white px-6 py-2 rounded-lg hover:bg-[#0056CC] transition-colors font-medium"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#007BFF] text-white px-3 sm:px-6 py-2 rounded-lg hover:bg-[#0056CC] transition-colors font-medium text-sm sm:text-base"
                 >
-                  Search
+                  <span className="hidden sm:inline">Search</span>
+                  <Search size={16} className="sm:hidden" />
                 </button>
               </form>
             </div>

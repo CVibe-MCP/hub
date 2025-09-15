@@ -24,22 +24,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Slot machine spinning animation */
-@keyframes spin-up {
+/* Simple fade animation for package managers */
+@keyframes fade-in {
   0% {
-    transform: translateY(0) rotateX(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-50%) rotateX(90deg);
-    opacity: 0.3;
+    opacity: 0;
+    transform: translateY(4px);
   }
   100% {
-    transform: translateY(0) rotateX(0deg);
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.animate-spin-up {
-  animation: spin-up 0.5s ease-out;
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
 }

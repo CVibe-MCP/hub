@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Package, Sparkles, Loader2 } from 'lucide-react';
-import Link from 'next/link';
+import { Package, Sparkles, Loader2 } from 'lucide-react';
 import SubmitPromptForm, { PromptFormData } from '@/components/SubmitPromptForm';
 import { apiClient } from '@/lib/api';
 import { ApiPromptCreateRequest } from '@/lib/types';
@@ -146,21 +145,9 @@ export default function SubmitPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/"
-                  className={`inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors ${
-                    isSubmitting ? 'pointer-events-none opacity-50' : ''
-                  }`}
-                >
-                  <ArrowLeft size={20} className="mr-2" />
-                  Back to Home
-                </Link>
-                <div className="h-6 w-px bg-gray-300" />
-                <div className="flex items-center">
-                  <Package className="text-blue-600 mr-2" size={24} />
-                  <h1 className="text-2xl font-bold text-gray-900">Submit Prompt</h1>
-                </div>
+              <div className="flex items-center">
+                <Package className="text-blue-600 mr-2" size={24} />
+                <h1 className="text-2xl font-bold text-gray-900">Submit Prompt</h1>
               </div>
               
               <div className="flex items-center space-x-2 text-sm text-gray-600">

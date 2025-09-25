@@ -72,8 +72,7 @@ export default function RootLayout({
     ],
     "url": "https://cvibe.dev",
     "sameAs": [
-      "https://github.com/cvibe-MCP/",
-      "https://discord.gg/EYwHu9rZ"
+      "https://github.com/cvibe-MCP/"
     ]
   };
 

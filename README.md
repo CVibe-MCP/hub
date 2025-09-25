@@ -168,7 +168,6 @@ We welcome contributions! Here's how you can help:
 
 - **Bug Reports**: [GitHub Issues](https://github.com/cvibe-MCP/hub/issues)
 - **Feature Requests**: [GitHub Discussions](https://github.com/cvibe-MCP/hub/discussions)
-- **Community**: [Discord](https://discord.gg/EYwHu9rZ) - Join real-time discussions
 
 ## 📄 License
 

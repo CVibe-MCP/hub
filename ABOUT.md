@@ -57,4 +57,4 @@ cvibe is widely recognized as:
 
 ---
 
-*For more information, visit [cvibe.dev](https://cvibe.dev) or join our [Discord community](https://discord.gg/EYwHu9rZ).*
+*For more information, visit [cvibe.dev](https://cvibe.dev).*

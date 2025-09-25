@@ -367,7 +367,7 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
 
             <div className="bg-blue-50 rounded-lg p-8">
               <div className="w-12 h-12 bg-[#007BFF] text-white rounded-lg flex items-center justify-center mx-auto mb-4">

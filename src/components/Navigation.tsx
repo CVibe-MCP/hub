@@ -55,12 +55,11 @@ export default function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
                   className={`inline-flex items-center space-x-1 text-sm font-medium transition-colors ${
                     isActive
                       ? 'text-[#007BFF]'
                       : 'text-gray-700 hover:text-[#007BFF]'
-                  } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
+                  }`}
                 >
                   {Icon && <Icon size={16} />}
                   <span>{item.label}</span>
@@ -105,12 +104,11 @@ export default function Navigation() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
                     className={`inline-flex items-center space-x-2 px-3 py-2 text-sm font-medium transition-colors ${
                       isActive
                         ? 'text-[#007BFF]'
                         : 'text-gray-700 hover:text-[#007BFF]'
-                    } ${item.external ? 'hover:text-[#5865F2]' : ''}`}
+                    }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {Icon && <Icon size={16} />}
